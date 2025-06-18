@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddvcubqa18bly"]
+
+[ext_resource type="Script" uid="uid://cmy61jrpxoif6" path="res://AI/ai_base.gd" id="1_hg67l"]
+[ext_resource type="Resource" uid="uid://b5nwa0lp3o8r3" path="res://AI/AI Resources/Aimless.tres" id="2_bhacr"]
+[ext_resource type="Resource" uid="uid://dv6fy88fc5qjn" path="res://AI/AI Resources/Jumper.tres" id="3_33lc0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_33lc0"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_81606"]
+
+[node name="AIBase" type="CharacterBody3D"]
+script = ExtResource("1_hg67l")
+ai_brain = Array[Resource]([ExtResource("2_bhacr"), ExtResource("3_33lc0")])
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_33lc0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_81606")

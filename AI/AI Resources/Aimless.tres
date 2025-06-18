@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AI_Brain" load_steps=2 format=3 uid="uid://b5nwa0lp3o8r3"]
+
+[ext_resource type="Script" uid="uid://cqkkpvmqxt888" path="res://AI/AI Resources/AI_Brain_Resource.gd" id="1_kbl3s"]
+
+[resource]
+script = ExtResource("1_kbl3s")
+ai_state_name = "AIMLESS"
+speed = 100.0
+jump_height = 300.0
+detection_range = 50.0
+reaction_delay = 0.5
+metadata/_custom_type_script = "uid://cqkkpvmqxt888"
