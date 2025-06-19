@@ -25,6 +25,13 @@ func spawn_ais():
 		add_child(ai_instance)
 		ai_instance.global_transform = Transform3D(ai_instance.global_transform.basis, spawn_point)
 
+		# Optional: mark as ready and assign destination if needed
+		ai_instance.nav_ready = true
+
+		if ai_instance.has_method("set_destination"):
+			var destination = get_random_navmesh_point(nav_map, nav_origin, spawn_radius)
+			ai_instance.set_destination(destination)
+
 func get_random_navmesh_point(nav_map, center: Vector3, radius: float) -> Vector3:
 	var tries := 0
 	while tries < 10:

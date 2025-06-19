@@ -1,22 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5eqq7rkoymst"]
+[gd_scene load_steps=8 format=3 uid="uid://c5eqq7rkoymst"]
 
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="1_giaex"]
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_x0ngj"]
+[ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="3_37bg0"]
+[ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="3_cxhbv"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_giaex"]
-vertices = PackedVector3Array(-10.013, 0.3, -8.2689, -10.013, 0.3, 8.9811, 11.987, 0.3, 8.9811, 11.987, 0.3, -8.2689)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+vertices = PackedVector3Array(-10.013, 0.105044, -0.268899, -8.213, 0.105044, -0.268899, -8.113, 0.105044, -1.2689, -10.013, 0.105044, -8.2689, -7.213, 0.345044, -1.0689, -7.213, 1.64504, 0.431101, -4.313, 1.64504, 0.431101, -4.313, 0.345044, -1.0689, -6.323, 0.955044, -0.378899, -7.513, 0.105044, -1.3689, -3.813, 0.105044, -1.3689, -3.813, 0.105044, -8.2689, -3.413, 0.105044, 2.4311, -2.813, 0.105044, 4.2311, -2.313, 0.105044, 4.1311, 2.987, 0.105044, 4.8311, 2.487, 0.195044, 5.1311, 2.487, 0.105044, 8.9311, 11.987, 0.105044, 8.9311, -2.013, 0.395044, 4.6311, 1.987, 0.395044, 4.6311, 1.4495, 0.395044, 4.5686, 0.912003, 0.325044, 4.5061, 0.374502, 0.325044, 4.4436, -0.162997, 0.105044, 4.3811, 2.287, 0.105044, 4.1311, -3.313, 0.105044, -1.0689, 2.887, 0.105044, 4.2311, 11.987, 0.105044, -8.2689, -3.813, 0.105044, 2.8311, -3.013, 0.105044, 4.8311, -7.913, 0.105044, 2.7311, -8.213, 0.105044, 2.3311, -10.013, 0.105044, 8.9311, -2.513, 0.105044, 8.9311, -2.513, 0.195044, 5.1311, -2.513, 0.105044, 5.67396, 2.087, 0.235044, 5.0311, 2.14415, 0.105044, 5.58824, -2.113, 0.235044, 5.0311, -2.17014, 0.105044, 5.58824, -1.523, 0.105044, 5.6211)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(6, 8, 7), PackedInt32Array(7, 8, 4), PackedInt32Array(4, 8, 5), PackedInt32Array(5, 8, 6), PackedInt32Array(9, 2, 3), PackedInt32Array(4, 9, 7), PackedInt32Array(7, 9, 10), PackedInt32Array(10, 9, 11), PackedInt32Array(11, 9, 3), PackedInt32Array(14, 13, 12), PackedInt32Array(16, 15, 17), PackedInt32Array(17, 15, 18), PackedInt32Array(14, 24, 19), PackedInt32Array(19, 24, 23), PackedInt32Array(19, 23, 22), PackedInt32Array(19, 22, 21), PackedInt32Array(19, 21, 20), PackedInt32Array(20, 21, 25), PackedInt32Array(25, 21, 22), PackedInt32Array(25, 22, 23), PackedInt32Array(25, 23, 24), PackedInt32Array(25, 24, 14), PackedInt32Array(25, 14, 12), PackedInt32Array(25, 12, 26), PackedInt32Array(18, 15, 27), PackedInt32Array(26, 10, 11), PackedInt32Array(26, 11, 27), PackedInt32Array(27, 11, 28), PackedInt32Array(27, 28, 18), PackedInt32Array(27, 25, 26), PackedInt32Array(12, 13, 29), PackedInt32Array(29, 13, 30), PackedInt32Array(33, 32, 31), PackedInt32Array(1, 32, 0), PackedInt32Array(0, 32, 33), PackedInt32Array(35, 36, 30), PackedInt32Array(30, 36, 34), PackedInt32Array(29, 30, 31), PackedInt32Array(31, 30, 34), PackedInt32Array(31, 34, 33), PackedInt32Array(37, 16, 38), PackedInt32Array(38, 16, 17), PackedInt32Array(39, 40, 35), PackedInt32Array(35, 40, 36), PackedInt32Array(36, 40, 34), PackedInt32Array(34, 41, 17), PackedInt32Array(17, 41, 38), PackedInt32Array(38, 41, 37), PackedInt32Array(37, 41, 20), PackedInt32Array(20, 41, 19), PackedInt32Array(19, 41, 39), PackedInt32Array(39, 41, 40), PackedInt32Array(40, 41, 34)]
+cell_size = 0.1
+cell_height = 0.01
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8vjkm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cxhbv"]
 
 [node name="Playground" type="Node3D"]
 script = ExtResource("1_x0ngj")
 ai_scene = ExtResource("1_giaex")
 ai_count = 500
-spawn_radius = 100.0
+spawn_radius = 35.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.62659, 0.779349, 0, -0.779349, 0.62659, 5.52276, 61.9315, 70.1037)
+transform = Transform3D(1, 0, 0, 0, 0.62659, 0.779349, 0, -0.779349, 0.62659, 5.52276, 32.4472, 38.7924)
 fov = 52.5
 size = 0.589
 
@@ -29,10 +35,30 @@ transform = Transform3D(3.3694, 0, 0, 0, 4.24936, 0, 0, 0, 5.6914, 0, 0, 0)
 navigation_mesh = SubResource("NavigationMesh_giaex")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.196153, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_8vjkm")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="NavigationRegion3D/StaticBody3D"]
 transform = Transform3D(23.0042, 0, 0, 0, 0.154211, 0, 0, 0, 18.2469, -10.513, -0.059867, 9.478)
+material = ExtResource("3_cxhbv")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(4.89794, 0, 0, 0, 0.916251, -0.400605, 0, 0.400605, 0.916251, 0, -0.277544, 4.8219)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D2"]
+shape = SubResource("BoxShape3D_cxhbv")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/StaticBody3D2"]
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(3.8251, 0, 0, 0, 1.87387, 1.93604, 0, -1.62543, 2.23195, -5.79983, 0, 0.543257)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D3"]
+shape = SubResource("BoxShape3D_cxhbv")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/StaticBody3D3"]
+
+[node name="MobileInput" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("3_37bg0")]
+camera = NodePath("../Camera3D")

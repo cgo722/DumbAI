@@ -5,8 +5,9 @@
 [resource]
 script = ExtResource("1_ckakf")
 ai_state_name = "JUMPER"
-speed = 100.0
-jump_height = 75.0
+speed = 4.0
+jump_height = 10.0
 detection_range = 50.0
 reaction_delay = 0.5
+vertex_color = Color(0, 0.389305, 0.875731, 1)
 metadata/_custom_type_script = "uid://cqkkpvmqxt888"

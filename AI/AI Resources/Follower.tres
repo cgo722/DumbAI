@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AI_Brain" load_steps=2 format=3 uid="uid://cycnrtxfr8aqi"]
+
+[ext_resource type="Script" uid="uid://cqkkpvmqxt888" path="res://AI/AI Resources/AI_Brain_Resource.gd" id="1_2hhxf"]
+
+[resource]
+script = ExtResource("1_2hhxf")
+ai_state_name = "FOLLOWER"
+speed = 2.0
+jump_height = 300.0
+detection_range = 50.0
+reaction_delay = 0.5
+vertex_color = Color(0.147712, 0.737138, 1.92523e-07, 1)
+metadata/_custom_type_script = "uid://cqkkpvmqxt888"
