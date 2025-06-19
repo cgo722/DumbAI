@@ -6,7 +6,7 @@
 script = ExtResource("1_ckakf")
 ai_state_name = "JUMPER"
 speed = 100.0
-jump_height = 300.0
+jump_height = 75.0
 detection_range = 50.0
 reaction_delay = 0.5
 metadata/_custom_type_script = "uid://cqkkpvmqxt888"
