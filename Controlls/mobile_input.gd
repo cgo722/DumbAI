@@ -43,7 +43,7 @@ func raycast_ai(screen_pos: Vector2) -> Node:
 	var params = PhysicsRayQueryParameters3D.new()
 	params.from = from
 	params.to = to
-	params.collision_mask = 1
+	params.collision_mask = 1 << 2  # Layer 3 (0-based index)
 	params.exclude = []
 
 	var result = space_state.intersect_ray(params)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AI_Brain" load_steps=2 format=3 uid="uid://djnn55yk60d86"]
+
+[ext_resource type="Script" uid="uid://cqkkpvmqxt888" path="res://AI/AI Resources/AI_Brain_Resource.gd" id="1_45yw1"]
+
+[resource]
+script = ExtResource("1_45yw1")
+ai_state_name = "COWARD"
+speed = 4.0
+jump_height = 300.0
+detection_range = 20.0
+reaction_delay = 0.5
+vertex_color = Color(0.44007, 0.255861, 0.220999, 1)
+metadata/_custom_type_script = "uid://cqkkpvmqxt888"

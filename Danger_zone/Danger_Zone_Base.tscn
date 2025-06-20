@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://ecv6kkicc3lp"]
+
+[ext_resource type="Script" uid="uid://6eeyqpjds7bc" path="res://Danger_zone/danger_zone_base.gd" id="1_hyij6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ckw60"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hyij6"]
+albedo_color = Color(0.51705, 0.00352798, 0.951118, 1)
+
+[node name="DangerZoneBase" type="Area3D" groups=["danger"]]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_hyij6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ckw60")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+material_override = SubResource("StandardMaterial3D_hyij6")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="input_event" from="." to="." method="_on_input_event"]

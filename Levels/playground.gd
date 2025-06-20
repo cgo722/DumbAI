@@ -3,6 +3,9 @@ extends Node3D
 @export var ai_scene: PackedScene
 @export var ai_count: int = 5
 @export var spawn_radius: float = 10.0
+@export var danger_zone_scene: PackedScene
+@export var danger_zone_count: int = 1
+@export var danger_spawn_radius: float = 15.0
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
 
 func _ready() -> void:
@@ -46,3 +49,22 @@ func get_random_navmesh_point(nav_map, center: Vector3, radius: float) -> Vector
 			return closest
 		tries += 1
 	return center
+
+
+func _on_timer_timeout() -> void:
+	var nav_map = nav_region.get_navigation_map()
+	var nav_origin = nav_region.global_transform.origin
+
+	for i in range(danger_zone_count):
+		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, danger_spawn_radius)
+		var danger_instance = danger_zone_scene.instantiate()
+		add_child(danger_instance)
+		danger_instance.global_transform = Transform3D(danger_instance.global_transform.basis, spawn_point)
+
+		# Apply random non-uniform scale between 0.5 and 1.5 for each axis
+		var random_scale = Vector3(
+			randf_range(0.5, 6.5),
+			randf_range(0.5, 2.5),
+			randf_range(0.5, 6.5)
+		)
+		danger_instance.scale = random_scale

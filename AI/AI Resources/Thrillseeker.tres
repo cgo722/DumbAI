@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AI_Brain" load_steps=2 format=3 uid="uid://sgyp6bwvasx3"]
+
+[ext_resource type="Script" uid="uid://cqkkpvmqxt888" path="res://AI/AI Resources/AI_Brain_Resource.gd" id="1_uwprg"]
+
+[resource]
+script = ExtResource("1_uwprg")
+ai_state_name = "THRILLSEEKER"
+speed = 4.0
+jump_height = 300.0
+detection_range = 14.0
+reaction_delay = 0.5
+vertex_color = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://cqkkpvmqxt888"

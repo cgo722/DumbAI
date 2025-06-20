@@ -35,7 +35,6 @@ var last_position := Vector3.ZERO
 var leader_agent: Node = null
 var follow_time: float = 0.0
 @export var max_follow_time: float = 10.0  # seconds to follow one leader
-@export var follow_search_radius: float = 20.0  # max distance to look for leaders
 
 var tapped_pause_timer := 0.0
 @export var tapped_pause_duration := 1.0  # seconds to stay frozen
@@ -81,6 +80,19 @@ func check_stuck(delta):
 		set_destination(new_destination)
 		nav_agent.set_target_position(new_destination)
 
+
+
+func get_nearest_danger() -> Array:
+	var dangers = get_tree().get_nodes_in_group("danger")
+	var nearest = null
+	var min_dist = INF
+	for danger in dangers:
+		var dist = global_transform.origin.distance_to(danger.global_transform.origin)
+		if dist < min_dist:
+			min_dist = dist
+			nearest = danger
+	return [nearest, min_dist]
+
 func tick_state(state, _blob, delta):
 	# TAP: freeze movement temporarily
 	if tapped_pause_timer > 0:
@@ -121,11 +133,46 @@ func tick_state(state, _blob, delta):
 
 	match state:
 		AIState.THRILLSEEKER:
+			var danger_data := get_nearest_danger()
+			var danger = danger_data[0]
+			var dist = danger_data[1]
+			if danger and dist < chosen_brain.detection_range:
+				nav_agent.set_target_position(danger.global_transform.origin)
+			elif nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
+				var tries := 0
+				while tries < 10:
+					var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
+					if global_transform.origin.distance_to(new_destination) > 1.0:
+						destination = new_destination
+						set_destination(destination)
+						nav_agent.set_target_position(destination)
+						break
+					tries += 1
+
 			var next_pos = nav_agent.get_next_path_position()
 			var direction = (next_pos - global_transform.origin).normalized()
 			self.velocity.x = direction.x * chosen_brain.speed
 			self.velocity.z = direction.z * chosen_brain.speed
 		AIState.COWARD:
+			var danger_data := get_nearest_danger()
+			var danger = danger_data[0]
+			var dist = danger_data[1]
+			if danger and dist < chosen_brain.detection_range:
+				# Run directly away from danger
+				var escape_direction = (global_transform.origin - danger.global_transform.origin).normalized()
+				var escape_pos = global_transform.origin + escape_direction * aimless_radius
+				nav_agent.set_target_position(escape_pos)
+			elif nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
+				var tries := 0
+				while tries < 10:
+					var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
+					if global_transform.origin.distance_to(new_destination) > 1.0:
+						destination = new_destination
+						set_destination(destination)
+						nav_agent.set_target_position(destination)
+						break
+					tries += 1
+
 			var next_pos = nav_agent.get_next_path_position()
 			var direction = (next_pos - global_transform.origin).normalized()
 			self.velocity.x = direction.x * chosen_brain.speed * 1.2
@@ -152,7 +199,7 @@ func tick_state(state, _blob, delta):
 			if leader_agent == null or follow_time > max_follow_time or not is_instance_valid(leader_agent):
 				leader_agent = null
 				var agents = get_tree().get_nodes_in_group("ai_agents")
-				var nearest_dist = follow_search_radius + 1
+				var nearest_dist = chosen_brain.detection_range + 1
 				for agent in agents:
 					if agent == self:
 						continue
@@ -178,6 +225,9 @@ func tick_state(state, _blob, delta):
 	# Apply gravity
 	if not is_on_floor():
 		self.velocity.y -= gravity * delta
+	else :
+		# Reset vertical velocity when on floor
+		self.velocity.y = 0.0
 	# Do NOT set velocity.y = 0 here, let the jump logic handle it!
 
 	move_and_slide()
@@ -201,19 +251,13 @@ func _ready():
 		else:
 			var mesh = mesh_instance.mesh
 			var surface_count = mesh.get_surface_count()
-			print("Mesh has ", surface_count, " surface(s)")
 
 			for i in range(surface_count):
 				var mat = mesh_instance.get_active_material(i)
 				if mat:
-					print("Modifying material on surface ", i, ": ", mat)
 					var new_mat = mat.duplicate()
 					new_mat.albedo_color = chosen_brain.vertex_color
 					mesh_instance.set_surface_override_material(i, new_mat)
-				else:
-					print("No material found on surface ", i)
-	else:
-		print("MeshInstance3D is not assigned!")
 	NavigationServer3D.map_changed.connect(_on_nav_map_changed)
 	
 	# Optionally, you can also call _check_nav_ready() after a short delay
