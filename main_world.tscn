@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgh1yjj381v22"]
+[gd_scene load_steps=6 format=3 uid="uid://dgh1yjj381v22"]
 
 [ext_resource type="Script" uid="uid://cyy0s58d1hin5" path="res://GameManager.gd" id="1_itk02"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="2_43o5b"]
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="3_3etub"]
+[ext_resource type="PackedScene" uid="uid://bukeyishijk74" path="res://Levels/Menus/MainMenu.tscn" id="4_3etub"]
+[ext_resource type="PackedScene" uid="uid://c5eqq7rkoymst" path="res://Levels/Playground.tscn" id="5_whfra"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_itk02")
 player = ExtResource("2_43o5b")
 employee = ExtResource("3_3etub")
+mainMenu = ExtResource("4_3etub")
+levels = Array[PackedScene]([ExtResource("5_whfra")])

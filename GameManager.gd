@@ -13,6 +13,7 @@ var high_score : int = 0
 @export var mainMenu : PackedScene
 @export var gameOver : PackedScene
 @export var pauseMenu : PackedScene
+@export var levels : Array[PackedScene] = []
 
 func _ready():
 	# Initialize the game state
@@ -34,12 +35,21 @@ func change_state(new_state: GameState) -> void:
 
 func show_main_menu() -> void:
 	print("Showing main menu")
-	# Load or instantiate mainMenu scene here if needed
+	if mainMenu:
+		var menu_instance = mainMenu.instantiate()
+		menu_instance.connect("start_game", Callable(self, "_on_main_menu_start_game"))
+		add_child(menu_instance)
+
+func _on_main_menu_start_game():
+	change_state(GameState.PLAYING)
 
 func start_game() -> void:
 	print("Starting game")
 	score = 0
-	# Load or instantiate player and employee scenes here if needed
+	# Spawn the first level from levels[0]
+	if levels.size() > 0 and levels[0]:
+		var level_instance = levels[0].instantiate()
+		add_child(level_instance)
 
 func show_game_over() -> void:
 	print("Game over")
