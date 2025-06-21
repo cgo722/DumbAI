@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://c5eqq7rkoymst"]
 
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="1_giaex"]
-[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_x0ngj"]
+[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/Playground.gd" id="1_x0ngj"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="3_37bg0"]
 [ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="3_cxhbv"]
 [ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Danger_zone/Danger_Zone_Base.tscn" id="5_bpo5k"]

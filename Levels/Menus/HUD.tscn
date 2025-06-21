@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdcq23pv67lx"]
+
+[ext_resource type="Texture2D" uid="uid://booy323ur7r86" path="res://icon.svg" id="1_e55oq"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1.0
+offset_bottom = 1.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="Retry" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_e55oq")
+
+[node name="Other" type="OptionButton" parent="HBoxContainer"]
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "Options"
+popup/item_0/id = 0
+popup/item_1/text = "Quit"
+popup/item_1/id = 1
