@@ -14,6 +14,9 @@ var high_score : int = 0
 @export var gameOver : PackedScene
 @export var pauseMenu : PackedScene
 @export var levels : Array[PackedScene] = []
+@export var hud : PackedScene
+var current_level_instance: Node = null
+var current_hud_instance: Node = null
 
 func _ready():
 	# Initialize the game state
@@ -46,13 +49,31 @@ func _on_main_menu_start_game():
 func start_game() -> void:
 	print("Starting game")
 	score = 0
+	# Remove previous HUD and level if they exist
+	if current_hud_instance:
+		current_hud_instance.queue_free()
+	if current_level_instance:
+		current_level_instance.queue_free()
+	# Spawn HUD
+	current_hud_instance = hud.instantiate()
+	add_child(current_hud_instance)
 	# Spawn the first level from levels[0]
 	if levels.size() > 0 and levels[0]:
-		var level_instance = levels[0].instantiate()
-		add_child(level_instance)
+		current_level_instance = levels[0].instantiate()
+		add_child(current_level_instance)
 
 func show_game_over() -> void:
 	print("Game over")
 	if score > high_score:
 		high_score = score
 	# Load or instantiate gameOver scene here if needed
+
+func restart_level() -> void:
+	print("Restarting level")
+	if current_level_instance:
+		current_level_instance.queue_free()
+	# Respawn the current level (assuming levels[0] for now)
+	if levels.size() > 0 and levels[0]:
+		current_level_instance = levels[0].instantiate()
+		add_child(current_level_instance)
+	# Optionally reset score or other variables as needed

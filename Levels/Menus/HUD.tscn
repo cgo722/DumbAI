@@ -1,14 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdcq23pv67lx"]
+[gd_scene load_steps=3 format=3 uid="uid://cdcq23pv67lx"]
 
 [ext_resource type="Texture2D" uid="uid://booy323ur7r86" path="res://icon.svg" id="1_e55oq"]
+[ext_resource type="Script" uid="uid://dcfufv1qwbujd" path="res://Levels/Menus/hud.gd" id="1_k32n8"]
 
-[node name="Hud" type="Control"]
+[node name="Hud" type="Control" node_paths=PackedStringArray("restart_button", "dropdown")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_k32n8")
+restart_button = NodePath("HBoxContainer/Retry")
+dropdown = NodePath("HBoxContainer/Other")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
