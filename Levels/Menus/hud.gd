@@ -5,6 +5,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	restart_button.pressed.connect(_on_restart_pressed)
 	dropdown.item_selected.connect(_on_dropdown_selected)
 
