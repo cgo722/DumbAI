@@ -22,8 +22,6 @@ cell_height = 0.01
 [node name="Playground" type="Node3D"]
 script = ExtResource("1_x0ngj")
 ai_scene = ExtResource("1_giaex")
-ai_count = 10
-spawn_radius = 35.0
 danger_zone_scene = ExtResource("5_bpo5k")
 
 [node name="Camera3D" type="Camera3D" parent="."]

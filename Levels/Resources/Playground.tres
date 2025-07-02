@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LevelConfig" load_steps=2 format=3 uid="uid://dl43nxtkgc4lt"]
+
+[ext_resource type="Script" uid="uid://dypsirafxaxm6" path="res://Levels/Resources/level_config.gd" id="1_0wojd"]
+
+[resource]
+script = ExtResource("1_0wojd")
+level_hash = 0
+ai_spawns = Array[Dictionary]([])
+danger_zones = Array[Vector3]([])
+work_zones = Array[Vector3]([])
+metadata/_custom_type_script = "uid://dypsirafxaxm6"

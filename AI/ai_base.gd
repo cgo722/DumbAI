@@ -22,6 +22,8 @@ enum AIState {
 
 @export var mesh_instance: MeshInstance3D
 
+@export var level_hash: int = 0 # Set this per level in the editor or via code
+
 var nav_ready := false
 var jumper_jump_check_timer := 0.0
 @export var jumper_jump_check_interval := 0.75 # seconds between jump checks
@@ -279,10 +281,17 @@ func on_swipe(direction: Vector3):
 
 func _ready():
 	add_to_group("ai_agents")
-	chosen_brain = ai_brain[randi_range(0, ai_brain.size() - 1)]
-	ai_state = ai_state_from_string(chosen_brain.ai_state_name)
+	# Use level_hash to deterministically pick a brain
+	if ai_brain.size() > 0:
+		var hash_value = int(hash(str(level_hash)))
+		var brain_index = abs(hash_value) % ai_brain.size()
+		chosen_brain = ai_brain[brain_index]
+		ai_state = ai_state_from_string(chosen_brain.ai_state_name)
+	else:
+		chosen_brain = null
+		ai_state = AIState.NULL
 	# Set mesh vertex color from brain
-	if mesh_instance:
+	if mesh_instance and chosen_brain:
 		if mesh_instance.mesh == null:
 			print("MeshInstance3D has no mesh assigned!")
 		else:
@@ -296,7 +305,6 @@ func _ready():
 					new_mat.albedo_color = chosen_brain.vertex_color
 					mesh_instance.set_surface_override_material(i, new_mat)
 	NavigationServer3D.map_changed.connect(_on_nav_map_changed)
-	
 	# Optionally, you can also call _check_nav_ready() after a short delay
 
 func _on_nav_map_changed(nav_map_id):

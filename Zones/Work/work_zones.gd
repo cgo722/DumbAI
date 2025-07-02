@@ -2,21 +2,27 @@ extends Area3D
 
 # The AI's current state in the work zone. Can be set in the editor or by code.
 @export var current_state: String = "IDLE"
-
+@export var max_health: int = 10
+var health: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	# Create a timer for health
+	score_timer = Timer.new()
+	score_timer.wait_time = 1.0
+	score_timer.one_shot = false
+	score_timer.autostart = false
+	score_timer.timeout.connect(_on_score_timer_timeout)
+	add_child(score_timer)
+	health = max_health
 
 
 # Called when a body enters the area. Signal must be connected in the editor.
 var ai_stopped := false
+var score_timer: Timer = null
+var stopped_ai = null
 
 func _on_body_entered(body):
 	if ai_stopped:
@@ -41,20 +47,25 @@ func _on_body_entered(body):
 			if body.has_method("set_global_position"):
 				body.global_transform.origin = global_transform.origin
 			ai_stopped = true
-			# Access score from GameManager (assumes root node)
-			var game_manager = get_tree().get_root().get_node("MainWorld")
-			if game_manager:
-				print("Current score:", game_manager.score)
-			else:
-				print("GameManager not found on root node!")
+			stopped_ai = body
+			score_timer.start()
 		else:
 			print("AI state does not match work zone state. AI: %s, Zone: %s" % [ai_state, current_state])
 	else:
 		print("Entered body does not have a 'get_state' method.")
 
-func _on_body_exited(body):
-	ai_stopped = false # Allow a new AI to be stopped when one leaves
-	# Inform mobile_input to unblock this agent
+func _on_body_exited(_body):
+	ai_stopped = false
+	stopped_ai = null
+	score_timer.stop()
 	var mobile_input = get_tree().get_root().find_child("mobile_input", true, false)
 	if mobile_input and "clear_agent_in_workzone" in mobile_input:
 		mobile_input.clear_agent_in_workzone()
+
+func _on_score_timer_timeout():
+	# Decrease health every second while AI is stopped
+	health -= 1
+	print("Work zone health:", health)
+	if health <= 0:
+		print("Work zone destroyed!")
+		queue_free()
