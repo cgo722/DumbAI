@@ -10,4 +10,5 @@ jump_height = 300.0
 detection_range = 50.0
 reaction_delay = 0.5
 vertex_color = Color(1, 0.0459737, 0.148995, 1)
+leave_chance = 0.2
 metadata/_custom_type_script = "uid://cqkkpvmqxt888"

@@ -7,17 +7,23 @@ var touch_start_pos := Vector2.ZERO
 var is_dragging := false
 var touched_agent = null
 var grabbed_agent: Node = null
+var agent_in_workzone: Node = null
 var drag_plane: Plane
 var drag_offset: Vector3 = Vector3.ZERO
 
 func _unhandled_input(event):
-	print("Received input:", event)
+	if agent_in_workzone:
+		grabbed_agent = null
+		return
+
 	if event is InputEventScreenTouch:
-		print("Screen touch:", event.pressed)
 		if event.pressed:
-			grabbed_agent = raycast_ai(event.position)
-			print("Grabbed agent:", grabbed_agent)
-			if grabbed_agent:
+			var candidate = raycast_ai(event.position)
+			# Only grab if candidate is not stopped
+			if candidate and (not ("is_stopped" in candidate) or not candidate.is_stopped):
+				grabbed_agent = candidate
+				if "on_pickup" in grabbed_agent:
+					grabbed_agent.on_pickup()
 				var from = camera.project_ray_origin(event.position)
 				var to = from + camera.project_ray_normal(event.position) * 1000
 				drag_plane = Plane(Vector3.UP, grabbed_agent.global_transform.origin.y)
@@ -28,10 +34,11 @@ func _unhandled_input(event):
 					drag_offset = Vector3.ZERO
 		else:
 			if grabbed_agent:
+				if "on_release" in grabbed_agent:
+					grabbed_agent.on_release()
 				grabbed_agent = null
 
 	elif event is InputEventScreenDrag and grabbed_agent:
-		print("Dragging agent at position:", event.position)
 		var from = camera.project_ray_origin(event.position)
 		var to = from + camera.project_ray_normal(event.position) * 1000
 		var intersect = drag_plane.intersects_ray(from, to)
@@ -54,6 +61,17 @@ func raycast_ai(screen_pos: Vector2) -> Node:
 	if result:
 		# do something with result
 		if result.collider and result.collider.is_in_group("ai_agents"):
-			print("Raycast hit:", result.collider)
 			return result.collider
 	return null
+
+func release_agent(agent):
+	if grabbed_agent == agent:
+		grabbed_agent = null
+
+func set_agent_in_workzone(agent):
+	agent_in_workzone = agent
+	if grabbed_agent == agent:
+		grabbed_agent = null
+
+func clear_agent_in_workzone():
+	agent_in_workzone = null

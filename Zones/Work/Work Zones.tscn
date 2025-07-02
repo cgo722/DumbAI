@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb6suvyhofdm5"]
+
+[ext_resource type="Script" uid="uid://c6kf5c0dtuq8l" path="res://Zones/Work/work_zones.gd" id="1_4n0eh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kvaex"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iyc04"]
+albedo_color = Color(4.04298e-06, 0.745716, 0.822257, 1)
+
+[node name="WorkZones" type="Area3D"]
+collision_mask = 5
+script = ExtResource("1_4n0eh")
+current_state = "AIMLESS"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_kvaex")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+material_override = SubResource("StandardMaterial3D_iyc04")

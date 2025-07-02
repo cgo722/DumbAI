@@ -7,3 +7,4 @@ class_name AI_Brain
 @export var detection_range: float = 50.0   # Radius to detect targets
 @export var reaction_delay: float = 0.5     # Seconds delay before reacting
 @export var vertex_color: Color = Color(1, 1, 1)  # Default to white
+@export var leave_chance : float = 1

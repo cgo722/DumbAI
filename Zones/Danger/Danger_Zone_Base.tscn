@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ecv6kkicc3lp"]
 
-[ext_resource type="Script" uid="uid://6eeyqpjds7bc" path="res://Danger_zone/danger_zone_base.gd" id="1_hyij6"]
+[ext_resource type="Script" uid="uid://6eeyqpjds7bc" path="res://Zones/Danger/danger_zone_base.gd" id="1_hyij6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ckw60"]
 

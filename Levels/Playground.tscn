@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5eqq7rkoymst"]
+[gd_scene load_steps=11 format=3 uid="uid://c5eqq7rkoymst"]
 
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="1_giaex"]
-[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/Playground.gd" id="1_x0ngj"]
+[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_x0ngj"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="3_37bg0"]
 [ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="3_cxhbv"]
-[ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Danger_zone/Danger_Zone_Base.tscn" id="5_bpo5k"]
+[ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Zones/Danger/Danger_Zone_Base.tscn" id="5_bpo5k"]
+[ext_resource type="PackedScene" uid="uid://bb6suvyhofdm5" path="res://Zones/Work/Work Zones.tscn" id="6_86lql"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_giaex"]
 vertices = PackedVector3Array(-10.013, 0.105187, 0.231099, -8.213, 0.105187, 0.231099, -8.213, 0.105187, -0.6689, -7.813, 0.105187, -1.0689, -10.013, 0.105187, -8.2689, -4.513, 0.105187, -1.0689, -4.513, 0.105187, -8.2689, -3.713, 0.105187, -1.0689, -3.313, 0.105187, -0.6689, 11.987, 0.105187, -8.2689, -3.313, 0.105187, 1.1311, -3.813, 0.265187, 1.4311, -3.813, 0.105187, 8.9311, 11.987, 0.105187, 8.9311, -0.318921, 0.515187, 4.43142, 1.49513, 0.105187, 5.03976, -1.51096, 0.105187, 3.83626, 0.291054, 0.355187, 3.82944, -1.51484, 0.105187, 5.62173, 0.287122, 0.515187, 5.03097, -0.912782, 0.105187, 6.23887, 0.287169, 0.385187, 5.63492, -0.318777, 0.105187, 6.22326, 1.48309, 0.105187, 4.4246, -0.306834, 0.395187, 5.63052, -0.912975, 0.105187, 3.22307, 0.881175, 0.225187, 5.63931, 2.69125, 0.105187, 6.22524, -0.920888, 0.395187, 5.02218, -2.723, 0.105187, 2.6211, 0.889088, 0.355187, 4.44021, 0.881126, 0.365187, 5.03537, 0.295083, 0.505187, 4.43581, -0.306883, 0.515187, 5.02658, 1.49518, 0.105187, 5.62371, -0.912927, 0.385187, 4.42702, -0.32295, 0.365187, 3.82505, -0.92084, 0.265187, 5.62613, -0.916956, 0.225187, 3.84065, -8.113, 0.105187, 1.3311, -10.013, 0.105187, 8.9311, -4.313, 0.355187, 1.1311, -4.313, 0.675187, 0.1311, -7.213, 0.675187, 0.1311, -7.213, 0.355187, 1.1311, -7.513, 0.265187, 1.4311, -7.69157, 0.105187, 1.96681, -7.813, 0.105187, 1.3811, -4.50698, 0.105187, 2.03868)
@@ -21,7 +22,7 @@ cell_height = 0.01
 [node name="Playground" type="Node3D"]
 script = ExtResource("1_x0ngj")
 ai_scene = ExtResource("1_giaex")
-ai_count = 500
+ai_count = 10
 spawn_radius = 35.0
 danger_zone_scene = ExtResource("5_bpo5k")
 
@@ -66,14 +67,11 @@ shape = SubResource("BoxShape3D_cxhbv")
 [node name="MobileInput" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("3_37bg0")]
 camera = NodePath("../Camera3D")
 
-[node name="DangerZoneBase" parent="." instance=ExtResource("5_bpo5k")]
-transform = Transform3D(6.81082, 0, 0, 0, 1, 0, 0, 0, 5.80459, -3.65389, 0.5, -7.80851)
-
-[node name="DangerZoneBase2" parent="." instance=ExtResource("5_bpo5k")]
-transform = Transform3D(4.5168, 8.91148e-05, 4.34451, 0.00454932, 1, -0.00412649, -5.09762, 0.000971392, 3.84949, 8.73749, 0.5, 4.52317)
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
+
+[node name="WorkZones" parent="." instance=ExtResource("6_86lql")]
+transform = Transform3D(4.99054, 0, 0, 0, 1, 0, 0, 0, 5.69149, -5.00558, 0.705725, -8.51318)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

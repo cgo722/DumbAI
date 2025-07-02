@@ -25,7 +25,7 @@ enum AIState {
 var nav_ready := false
 var jumper_jump_check_timer := 0.0
 @export var jumper_jump_check_interval := 0.75 # seconds between jump checks
-@export var jumper_jump_chance := 0.15 # 40% chance per check
+@export var jumper_jump_chance := .2 # 100% chance per check (for testing)
 
 var stuck_timer := 0.0
 var last_position := Vector3.ZERO
@@ -45,6 +45,16 @@ var swipe_timer := 0.0
 @export var swipe_speed := 8.0
 
 var focused_danger: Node = null
+
+var is_stopped := false
+var stopped_timer := 0.0
+var stopped_interval := 0.5
+
+var _was_on_floor := false
+
+var is_being_held := false
+var held_height := 5.0 # Height to lift the AI when picked up
+var original_y := 0.0
 
 func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 	var nav_map = nav_agent.get_navigation_map()
@@ -212,7 +222,7 @@ func tick_state(state, _blob, delta):
 			jumper_jump_check_timer += delta
 			if jumper_jump_check_timer >= jumper_jump_check_interval:
 				jumper_jump_check_timer = 0.0
-				if is_on_floor() and randf() < jumper_jump_chance:
+				if is_on_floor():
 					self.velocity.y = chosen_brain.jump_height
 		AIState.AIMLESS:
 			var next_pos = nav_agent.get_next_path_position()
@@ -251,10 +261,11 @@ func tick_state(state, _blob, delta):
 	# Apply gravity
 	if not is_on_floor():
 		self.velocity.y -= gravity * delta
-	else :
-		# Reset vertical velocity when on floor
-		self.velocity.y = 0.0
-	# Do NOT set velocity.y = 0 here, let the jump logic handle it!
+	else:
+		if not _was_on_floor:
+			# Just landed, reset vertical velocity
+			self.velocity.y = 0.0
+	_was_on_floor = is_on_floor()
 
 	move_and_slide()
 
@@ -296,6 +307,13 @@ func _on_nav_map_changed(nav_map_id):
 func _process(delta):
 	if not nav_ready:
 		return
+	# If stopped, do not tick state
+	if is_stopped:
+		stopped_timer += delta
+		if stopped_timer >= stopped_interval:
+			maybe_resume_movement()
+			stopped_timer = 0.0
+		return
 	if ai_state != AIState.NULL:
 		tick_state(ai_state, null, delta)
 	else:
@@ -319,3 +337,45 @@ func ai_state_from_string(state_name: String) -> AIState:
 
 func set_destination(target_position: Vector3) -> void:
 	nav_agent.set_target_position(target_position)
+
+func get_state():
+	return chosen_brain.ai_state_name
+
+func stop_movement():
+	is_stopped = true
+	stopped_timer = 0.0
+	velocity = Vector3.ZERO
+	# Optionally, you can also stop the NavigationAgent3D
+	nav_agent.set_target_position(global_transform.origin)
+
+func maybe_resume_movement(chance := -1.0):
+	# If chance is not provided, use chosen_brain.leave_chance if it exists, else default to 0.2
+	var actual_chance = chance
+	if actual_chance < 0.0:
+		if "leave_chance" in chosen_brain:
+			actual_chance = chosen_brain.leave_chance
+		else:
+			actual_chance = 0.2
+	if is_stopped and randf() < actual_chance:
+		is_stopped = false
+
+func detach_from_mouse():
+	# If this AI is currently grabbed by mobile_input, release it
+	var mobile_input = get_tree().get_root().find_child("mobile_input", true, false)
+	if mobile_input and "release_agent" in mobile_input:
+		mobile_input.release_agent(self)
+
+func on_pickup():
+	if not is_being_held:
+		is_being_held = true
+		original_y = global_transform.origin.y
+		var pos = global_transform.origin
+		pos.y += held_height
+		global_transform.origin = pos
+
+func on_release():
+	if is_being_held:
+		is_being_held = false
+		var pos = global_transform.origin
+		pos.y = original_y
+		global_transform.origin = pos
