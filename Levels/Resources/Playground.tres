@@ -5,7 +5,12 @@
 [resource]
 script = ExtResource("1_0wojd")
 level_hash = 0
-ai_spawns = Array[Dictionary]([])
-danger_zones = Array[Vector3]([])
-work_zones = Array[Vector3]([])
+ai_spawns = Array[Dictionary]([{
+"brain_index": 0,
+"position": Vector3(9.73, 3, -7.825)
+}])
+danger_zone_count = 1
+work_zone_count = 1
+danger_zone_scales = Array[Vector3]([])
+work_zone_scales = Array[Vector3]([])
 metadata/_custom_type_script = "uid://dypsirafxaxm6"

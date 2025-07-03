@@ -9,6 +9,8 @@ func on_danger_click():
 		queue_free()
 
 func _on_body_entered(_body:Node3D) -> void:
+	if "just_spawned" in _body and _body.just_spawned:
+		return
 	_body.queue_free()  # Free the body when it enters the area
 	pass # Replace with function body.
 

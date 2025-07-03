@@ -25,6 +25,8 @@ var score_timer: Timer = null
 var stopped_ai = null
 
 func _on_body_entered(body):
+	if "just_spawned" in body and body.just_spawned:
+		return
 	if ai_stopped:
 		return # Only allow one AI to be stopped at a time
 	print("yo")

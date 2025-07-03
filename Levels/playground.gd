@@ -19,37 +19,65 @@ func _on_nav_map_changed(nav_map_id):
 	if nav_region.get_navigation_map() == nav_map_id:
 		spawn_level_content()
 
+func is_point_safe(point: Vector3, danger_positions: Array, min_distance: float) -> bool:
+	for danger_pos in danger_positions:
+		if point.distance_to(danger_pos) < min_distance:
+			return false
+	return true
+
 func spawn_level_content():
+	# Seed the random number generator for deterministic placement
+	randomize()
+	seed(level_config.level_hash)
 	var nav_map = nav_region.get_navigation_map()
 	var nav_origin = nav_region.global_transform.origin
 
-	# Spawn AIs
-	for ai_data in level_config.ai_spawns:
-		var spawn_point = ai_data["position"]
-		var brain_index = ai_data["brain_index"]
-		var ai_instance = ai_scene.instantiate()
-		add_child(ai_instance)
-		ai_instance.global_transform = Transform3D(ai_instance.global_transform.basis, spawn_point)
-		ai_instance.nav_ready = true
-		if ai_instance.has("ai_brain") and ai_instance.has("chosen_brain"):
-			ai_instance.chosen_brain = ai_instance.ai_brain[brain_index]
-			ai_instance.ai_state = ai_instance.ai_state_from_string(ai_instance.chosen_brain.ai_state_name)
-		if ai_instance.has_method("set_destination"):
-			var destination = get_random_navmesh_point(nav_map, nav_origin, 10.0)
-			ai_instance.set_destination(destination)
-
-	# Spawn Danger Zones
-	for danger_pos in level_config.danger_zones:
+	# Spawn Danger Zones and record their positions
+	var danger_zone_positions = []
+	for i in range(level_config.danger_zone_count):
+		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
 		var danger_instance = danger_zone_scene.instantiate()
 		add_child(danger_instance)
-		danger_instance.global_transform = Transform3D(danger_instance.global_transform.basis, danger_pos)
-		# Optionally randomize scale or other properties here
+		danger_instance.global_transform = Transform3D(danger_instance.global_transform.basis, spawn_point)
+		# Set scale if provided
+		if i < level_config.danger_zone_scales.size():
+			danger_instance.scale = level_config.danger_zone_scales[i]
+		danger_zone_positions.append(spawn_point)
 
 	# Spawn Work Zones
-	for work_pos in level_config.work_zones:
+	for i in range(level_config.work_zone_count):
+		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
 		var work_instance = work_zone_scene.instantiate()
 		add_child(work_instance)
-		work_instance.global_transform = Transform3D(work_instance.global_transform.basis, work_pos)
+		work_instance.global_transform = Transform3D(work_instance.global_transform.basis, spawn_point)
+		# Set scale if provided
+		if i < level_config.work_zone_scales.size():
+			work_instance.scale = level_config.work_zone_scales[i]
+
+	# Spawn AIs, avoiding danger zones
+	for ai_data in level_config.ai_spawns:
+		if ai_data.has("position") and ai_data.has("brain_index"):
+			var spawn_point = ai_data["position"]
+			var brain_index = ai_data["brain_index"]
+			print("Spawning AI at:", spawn_point, " with brain index:", brain_index)
+			var ai_instance = ai_scene.instantiate()
+			add_child(ai_instance)
+			ai_instance.global_transform = Transform3D(ai_instance.global_transform.basis, spawn_point)
+			ai_instance.nav_ready = true
+			ai_instance.chosen_brain = ai_instance.ai_brain[brain_index]
+			ai_instance.ai_state = ai_instance.ai_state_from_string(ai_instance.chosen_brain.ai_state_name)
+			ai_instance.set_deferred("just_spawned", true)
+			var timer = Timer.new()
+			timer.wait_time = 0.5
+			timer.one_shot = true
+			timer.connect("timeout", Callable(ai_instance, "_on_spawn_delay_timeout"))
+			ai_instance.add_child(timer)
+			timer.start()
+			if ai_instance.has_method("set_destination"):
+				pass # Only set destination if you want the AI to move after spawn
+				# (left intentionally blank to avoid overriding spawn position)
+		else:
+			push_error("ai_data missing 'position' or 'brain_index': %s" % [ai_data])
 
 func get_random_navmesh_point(nav_map, center: Vector3, radius: float) -> Vector3:
 	var tries := 0

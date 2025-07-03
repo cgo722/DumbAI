@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://c5eqq7rkoymst"]
+[gd_scene load_steps=12 format=3 uid="uid://c5eqq7rkoymst"]
 
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="1_giaex"]
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_x0ngj"]
+[ext_resource type="Resource" uid="uid://dl43nxtkgc4lt" path="res://Levels/Resources/Playground.tres" id="2_yxqhd"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="3_37bg0"]
 [ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="3_cxhbv"]
 [ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Zones/Danger/Danger_Zone_Base.tscn" id="5_bpo5k"]
@@ -21,8 +22,10 @@ cell_height = 0.01
 
 [node name="Playground" type="Node3D"]
 script = ExtResource("1_x0ngj")
+level_config = ExtResource("2_yxqhd")
 ai_scene = ExtResource("1_giaex")
 danger_zone_scene = ExtResource("5_bpo5k")
+work_zone_scene = ExtResource("6_86lql")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.62659, 0.779349, 0, -0.779349, 0.62659, 5.52276, 32.4472, 38.7924)
@@ -68,8 +71,5 @@ camera = NodePath("../Camera3D")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
-
-[node name="WorkZones" parent="." instance=ExtResource("6_86lql")]
-transform = Transform3D(4.99054, 0, 0, 0, 1, 0, 0, 0, 5.69149, -5.00558, 0.705725, -8.51318)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -58,6 +58,8 @@ var is_being_held := false
 var held_height := 5.0 # Height to lift the AI when picked up
 var original_y := 0.0
 
+var just_spawned := true
+
 func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 	var nav_map = nav_agent.get_navigation_map()
 	if nav_map == null:
@@ -306,6 +308,7 @@ func _ready():
 					mesh_instance.set_surface_override_material(i, new_mat)
 	NavigationServer3D.map_changed.connect(_on_nav_map_changed)
 	# Optionally, you can also call _check_nav_ready() after a short delay
+	get_tree().create_timer(0.1).timeout.connect(_on_spawn_delay_timeout)
 
 func _on_nav_map_changed(nav_map_id):
 	# Only set nav_ready if this is our agent's map
@@ -387,3 +390,6 @@ func on_release():
 		var pos = global_transform.origin
 		pos.y = original_y
 		global_transform.origin = pos
+
+func _on_spawn_delay_timeout():
+	just_spawned = false
