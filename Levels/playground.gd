@@ -32,19 +32,10 @@ func spawn_level_content():
 	var nav_map = nav_region.get_navigation_map()
 	var nav_origin = nav_region.global_transform.origin
 
-	# Spawn Danger Zones and record their positions
-	var danger_zone_positions = []
-	for i in range(level_config.danger_zone_count):
-		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
-		var danger_instance = danger_zone_scene.instantiate()
-		add_child(danger_instance)
-		danger_instance.global_transform = Transform3D(danger_instance.global_transform.basis, spawn_point)
-		# Set scale if provided
-		if i < level_config.danger_zone_scales.size():
-			danger_instance.scale = level_config.danger_zone_scales[i]
-		danger_zone_positions.append(spawn_point)
+	# Start spawning Danger Zones over time (do not await)
+	spawn_danger_zones_over_time(nav_map, nav_origin)
 
-	# Spawn Work Zones
+	# Spawn Work Zones immediately
 	for i in range(level_config.work_zone_count):
 		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
 		var work_instance = work_zone_scene.instantiate()
@@ -54,7 +45,7 @@ func spawn_level_content():
 		if i < level_config.work_zone_scales.size():
 			work_instance.scale = level_config.work_zone_scales[i]
 
-	# Spawn AIs, avoiding danger zones
+	# Spawn AIs immediately
 	for ai_data in level_config.ai_spawns:
 		if ai_data.has("position") and ai_data.has("brain_index"):
 			var spawn_point = ai_data["position"]
@@ -78,6 +69,20 @@ func spawn_level_content():
 				# (left intentionally blank to avoid overriding spawn position)
 		else:
 			push_error("ai_data missing 'position' or 'brain_index': %s" % [ai_data])
+
+# Spawns danger zones one at a time with a delay
+const DANGER_ZONE_SPAWN_DELAY = 1.0
+func spawn_danger_zones_over_time(nav_map, nav_origin):
+	var danger_zone_positions = []
+	for i in range(level_config.danger_zone_count):
+		var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
+		var danger_instance = danger_zone_scene.instantiate()
+		add_child(danger_instance)
+		danger_instance.global_transform = Transform3D(danger_instance.global_transform.basis, spawn_point)
+		if i < level_config.danger_zone_scales.size():
+			danger_instance.scale = level_config.danger_zone_scales[i]
+		danger_zone_positions.append(spawn_point)
+		await get_tree().create_timer(DANGER_ZONE_SPAWN_DELAY).timeout
 
 func get_random_navmesh_point(nav_map, center: Vector3, radius: float) -> Vector3:
 	var tries := 0
