@@ -9,19 +9,11 @@ var health: int
 func _ready() -> void:
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
-	# Create a timer for health
-	score_timer = Timer.new()
-	score_timer.wait_time = 1.0
-	score_timer.one_shot = false
-	score_timer.autostart = false
-	score_timer.timeout.connect(_on_score_timer_timeout)
-	add_child(score_timer)
 	health = max_health
 
 
 # Called when a body enters the area. Signal must be connected in the editor.
 var ai_stopped := false
-var score_timer: Timer = null
 var stopped_ai = null
 
 func _on_body_entered(body):
@@ -50,7 +42,6 @@ func _on_body_entered(body):
 				body.global_transform.origin = global_transform.origin
 			ai_stopped = true
 			stopped_ai = body
-			score_timer.start()
 		else:
 			print("AI state does not match work zone state. AI: %s, Zone: %s" % [ai_state, current_state])
 	else:
@@ -59,15 +50,6 @@ func _on_body_entered(body):
 func _on_body_exited(_body):
 	ai_stopped = false
 	stopped_ai = null
-	score_timer.stop()
 	var mobile_input = get_tree().get_root().find_child("mobile_input", true, false)
 	if mobile_input and "clear_agent_in_workzone" in mobile_input:
 		mobile_input.clear_agent_in_workzone()
-
-func _on_score_timer_timeout():
-	# Decrease health every second while AI is stopped
-	health -= 1
-	print("Work zone health:", health)
-	if health <= 0:
-		print("Work zone destroyed!")
-		queue_free()

@@ -60,6 +60,8 @@ var original_y := 0.0
 
 var just_spawned := true
 
+var frozen := false
+
 func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 	var nav_map = nav_agent.get_navigation_map()
 	if nav_map == null:
@@ -318,6 +320,15 @@ func _on_nav_map_changed(nav_map_id):
 func _process(delta):
 	if not nav_ready:
 		return
+	if self.frozen:
+		velocity = Vector3.ZERO
+		# Prevent dragging while frozen
+		if is_being_held:
+			is_being_held = false
+			var pos = global_transform.origin
+			pos.y = original_y
+			global_transform.origin = pos
+		return
 	# If stopped, do not tick state
 	if is_stopped:
 		stopped_timer += delta
@@ -377,6 +388,8 @@ func detach_from_mouse():
 		mobile_input.release_agent(self)
 
 func on_pickup():
+	if self.frozen:
+		return
 	if not is_being_held:
 		is_being_held = true
 		original_y = global_transform.origin.y

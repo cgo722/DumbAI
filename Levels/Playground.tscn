@@ -72,4 +72,19 @@ camera = NodePath("../Camera3D")
 wait_time = 5.0
 autostart = true
 
+[node name="Workzones" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8405, 0, 4.37666)
+
+[node name="AiSpawns" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8405, 0, -4.62334)
+
+[node name="AiSpawns2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.159454, 0, -10.6233)
+
+[node name="Workzones2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.15945, 0, -6.62334)
+
+[node name="Workzones3" type="Node3D" parent="."]
+transform = Transform3D(6.1, 0, 0, 0, 1, 0, 0, 0, 4.2, -3.15945, 0, 12.3767)
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

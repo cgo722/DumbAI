@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://booy323ur7r86" path="res://icon.svg" id="1_e55oq"]
 [ext_resource type="Script" uid="uid://dcfufv1qwbujd" path="res://Levels/Menus/hud.gd" id="1_k32n8"]
 
-[node name="Hud" type="Control" node_paths=PackedStringArray("restart_button", "dropdown")]
+[node name="Hud" type="Control" node_paths=PackedStringArray("restart_button", "main_menu_button", "dropdown")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_k32n8")
 restart_button = NodePath("HBoxContainer/Retry")
+main_menu_button = NodePath("Back")
 dropdown = NodePath("HBoxContainer/Other")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -30,23 +31,17 @@ texture_normal = ExtResource("1_e55oq")
 
 [node name="Other" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
-item_count = 2
-popup/item_0/text = "Options"
+selected = 0
+item_count = 3
+popup/item_0/text = "Resume"
 popup/item_0/id = 0
-popup/item_1/text = "Quit"
+popup/item_1/text = "Speed Up"
 popup/item_1/id = 1
+popup/item_2/text = "Pause"
+popup/item_2/id = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+[node name="Back" type="TextureButton" parent="."]
 layout_mode = 1
-offset_right = 474.0
+offset_right = 128.0
 offset_bottom = 128.0
-
-[node name="Label" type="Label" parent="HBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 74
-text = "Score:"
-
-[node name="Label2" type="Label" parent="HBoxContainer2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 74
-text = "000000"
+texture_normal = ExtResource("1_e55oq")

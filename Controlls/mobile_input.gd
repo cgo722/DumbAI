@@ -19,8 +19,8 @@ func _unhandled_input(event):
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			var candidate = raycast_ai(event.position)
-			# Only grab if candidate is not stopped
-			if candidate and (not ("is_stopped" in candidate) or not candidate.is_stopped):
+# Only grab if candidate is not stopped and not frozen
+			if candidate and (not ("is_stopped" in candidate) or not candidate.is_stopped) and (not ("frozen" in candidate) or not candidate.frozen):
 				grabbed_agent = candidate
 				if "on_pickup" in grabbed_agent:
 					grabbed_agent.on_pickup()
@@ -39,6 +39,9 @@ func _unhandled_input(event):
 				grabbed_agent = null
 
 	elif event is InputEventScreenDrag and grabbed_agent:
+		# Prevent dragging if agent is frozen
+		if ("frozen" in grabbed_agent) and grabbed_agent.frozen:
+			return
 		var from = camera.project_ray_origin(event.position)
 		var to = from + camera.project_ray_normal(event.position) * 1000
 		var intersect = drag_plane.intersects_ray(from, to)

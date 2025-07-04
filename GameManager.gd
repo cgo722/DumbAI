@@ -6,8 +6,6 @@ enum GameState {
 	MAINMENU
 }
 var game_state : GameState = GameState.MAINMENU
-var score : int = 0
-var high_score : int = 0
 @export var player : PackedScene
 @export var employee : PackedScene
 @export var mainMenu : PackedScene
@@ -21,8 +19,6 @@ var current_hud_instance: Node = null
 func _ready():
 	# Initialize the game state
 	change_state(GameState.MAINMENU)
-	score = 0
-	high_score = 0
 
 
 # State machine functions
@@ -48,7 +44,6 @@ func _on_main_menu_start_game():
 
 func start_game() -> void:
 	print("Starting game")
-	score = 0
 	# Remove previous HUD and level if they exist
 	if current_hud_instance:
 		current_hud_instance.queue_free()
@@ -64,8 +59,6 @@ func start_game() -> void:
 
 func show_game_over() -> void:
 	print("Game over")
-	if score > high_score:
-		high_score = score
 	# Load or instantiate gameOver scene here if needed
 
 func restart_level() -> void:
@@ -76,4 +69,4 @@ func restart_level() -> void:
 	if levels.size() > 0 and levels[0]:
 		current_level_instance = levels[0].instantiate()
 		add_child(current_level_instance)
-	# Optionally reset score or other variables as needed
+	# Optionally reset other variables as needed
