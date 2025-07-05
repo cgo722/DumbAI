@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dgh1yjj381v22"]
+[gd_scene load_steps=10 format=3 uid="uid://dgh1yjj381v22"]
 
 [ext_resource type="Script" uid="uid://cyy0s58d1hin5" path="res://GameManager.gd" id="1_itk02"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="2_43o5b"]
@@ -6,7 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://bukeyishijk74" path="res://Levels/Menus/MainMenu.tscn" id="4_3etub"]
 [ext_resource type="PackedScene" uid="uid://k4q345ytui86" path="res://Levels/Menus/GameOver.tscn" id="5_uue8y"]
 [ext_resource type="PackedScene" uid="uid://c5eqq7rkoymst" path="res://Levels/Playground.tscn" id="5_whfra"]
+[ext_resource type="PackedScene" uid="uid://30h28q7nxajo" path="res://Levels/Level 0-5/Level0.tscn" id="6_aac4l"]
 [ext_resource type="PackedScene" uid="uid://cdcq23pv67lx" path="res://Levels/Menus/HUD.tscn" id="7_aac4l"]
+[ext_resource type="PackedScene" uid="uid://dqm3gbr0x4mwi" path="res://Levels/Menus/LevelSel.tscn" id="8_7ktct"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_itk02")
@@ -14,5 +16,6 @@ player = ExtResource("2_43o5b")
 employee = ExtResource("3_3etub")
 mainMenu = ExtResource("4_3etub")
 gameOver = ExtResource("5_uue8y")
-levels = Array[PackedScene]([ExtResource("5_whfra")])
+levels = Array[PackedScene]([ExtResource("6_aac4l"), ExtResource("5_whfra")])
 hud = ExtResource("7_aac4l")
+levelSelect = ExtResource("8_7ktct")

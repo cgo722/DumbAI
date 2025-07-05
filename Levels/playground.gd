@@ -9,10 +9,6 @@ extends Node3D
 
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
 
-var work_zone_respawn_delay := 2.0 # seconds to wait before respawning a work zone
-var active_work_zones := {}
-var available_work_zone_slots := []
-
 func _ready() -> void:
 	if not ai_scene or not nav_region or not level_config:
 		push_error("AI scene, NavigationRegion3D, or level_config not set!")
@@ -35,26 +31,6 @@ func spawn_level_content():
 	seed(level_config.level_hash)
 	var nav_map = nav_region.get_navigation_map()
 	var nav_origin = nav_region.global_transform.origin
-
-	# Start spawning Danger Zones over time (do not await)
-	spawn_danger_zones_over_time(nav_map, nav_origin)
-
-	# Spawn Work Zones using marker nodes if provided
-	if "work_zone_markers" in level_config and level_config.work_zone_markers.size() > 0:
-		available_work_zone_slots = level_config.work_zone_markers.duplicate()
-		active_work_zones.clear()
-		for i in range(min(level_config.work_zone_count, available_work_zone_slots.size())):
-			_spawn_work_zone_at_marker_slot(i)
-	else:
-		# Fallback: random spawn if no markers
-		for i in range(level_config.work_zone_count):
-			var spawn_point = get_random_navmesh_point(nav_map, nav_origin, 15.0)
-			var work_instance = work_zone_scene.instantiate()
-			add_child(work_instance)
-			work_instance.global_transform = Transform3D(work_instance.global_transform.basis, spawn_point)
-			# Set scale if provided
-			if i < level_config.work_zone_scales.size():
-				work_instance.scale = level_config.work_zone_scales[i]
 
 	# Spawn AIs immediately
 	for ai_data in level_config.ai_spawns:
@@ -91,35 +67,12 @@ func spawn_level_content():
 		else:
 			push_error("ai_data missing valid spawn point (Vector3) or 'brain_index': %s" % [ai_data])
 
-func _spawn_work_zone_at_marker_slot(slot_idx):
-	if slot_idx >= available_work_zone_slots.size():
-		return
-	var marker_path = available_work_zone_slots[slot_idx]
-	var marker = get_node_or_null(marker_path)
-	if marker:
-		var work_instance = work_zone_scene.instantiate()
-		add_child(work_instance)
-		work_instance.global_transform = Transform3D(work_instance.global_transform.basis, marker.global_transform.origin)
-		work_instance.scale = marker.scale
-		active_work_zones[marker_path] = work_instance
-		work_instance.connect("tree_exited", Callable(self, "_on_work_zone_completed").bind(marker_path))
-	else:
-		push_error("Work zone marker not found: %s" % [marker_path])
-
-func _on_work_zone_completed(marker_path):
-	if marker_path in active_work_zones:
-		active_work_zones.erase(marker_path)
-		# Wait, then respawn if under max count
-		call_deferred("_delayed_respawn_work_zone", marker_path)
-
-func _delayed_respawn_work_zone(marker_path):
-	await get_tree().create_timer(work_zone_respawn_delay).timeout
-	if marker_path in available_work_zone_slots and not active_work_zones.has(marker_path):
-		if active_work_zones.size() < level_config.work_zone_count:
-			_spawn_work_zone_at_marker_slot(available_work_zone_slots.find(marker_path))
+	# Start spawning Danger Zones over time (do not await)
+	call_deferred("spawn_danger_zones_over_time", nav_map, nav_origin)
 
 # Spawns danger zones one at a time with a delay and max active limit
 func spawn_danger_zones_over_time(nav_map, nav_origin):
+	await get_tree().create_timer(level_config.danger_zone_initial_delay).timeout
 	var danger_zone_positions = []
 	var active_danger_zones = []
 	var total_spawned = 0

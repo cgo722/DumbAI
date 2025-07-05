@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4i5b3vbkb4e2"]
+
+[ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="1_o55t5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wfgot"]
+
+[node name="Box" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wfgot")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+material_override = ExtResource("1_o55t5")

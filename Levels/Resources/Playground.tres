@@ -17,5 +17,6 @@ work_zone_count = 1
 danger_zone_scales = Array[Vector3]([])
 danger_zone_spawn_delay = 10.0
 danger_zone_max = 5
+danger_zone_initial_delay = 1.0
 work_zone_markers = Array[NodePath]([NodePath("Workzones"), NodePath("Workzones2"), NodePath("Workzones3")])
 metadata/_custom_type_script = "uid://dypsirafxaxm6"
