@@ -19,6 +19,8 @@ func _ready() -> void:
 		var btn = Button.new()
 		btn.text = "Level %d" % (i + 1)
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		btn.custom_minimum_size.y = 64
 		btn.pressed.connect(_on_level_button_pressed.bind(i))
 		grid_container.add_child(btn)
 

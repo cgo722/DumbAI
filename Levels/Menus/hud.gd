@@ -27,7 +27,7 @@ func _on_main_menu_pressed() -> void:
 		game_manager.current_level_instance.queue_free()
 		game_manager.current_level_instance = null
 	if game_manager.has_method("change_state"):
-		game_manager.change_state(game_manager.GameState.MAINMENU)
+		game_manager.change_state(game_manager.GameState.LEVEL_SELECT)
 	self.queue_free()
 
 func _on_dropdown_selected(index: int) -> void:

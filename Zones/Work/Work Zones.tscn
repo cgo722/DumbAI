@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bb6suvyhofdm5"]
+[gd_scene load_steps=8 format=3 uid="uid://bb6suvyhofdm5"]
 
 [ext_resource type="Script" uid="uid://c6kf5c0dtuq8l" path="res://Zones/Work/work_zones.gd" id="1_4n0eh"]
 
@@ -6,6 +6,24 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iyc04"]
 albedo_color = Color(4.04298e-06, 0.745716, 0.822257, 1)
+
+[sub_resource type="Gradient" id="Gradient_4n0eh"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.176471, 0.176471, 0.176471, 0.631373)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kvaex"]
+gradient = SubResource("Gradient_4n0eh")
+width = 120
+height = 16
+
+[sub_resource type="Gradient" id="Gradient_iyc04"]
+offsets = PackedFloat32Array(0.00396825)
+colors = PackedColorArray(0.68437, 0.62232, 0.275986, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rv3oe"]
+gradient = SubResource("Gradient_iyc04")
+width = 120
+height = 16
 
 [node name="WorkZones" type="Area3D"]
 collision_mask = 5
@@ -17,3 +35,26 @@ shape = SubResource("BoxShape3D_kvaex")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 material_override = SubResource("StandardMaterial3D_iyc04")
+
+[node name="HealthBar2D" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="HealthBar2D"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+max_value = 10.0
+texture_under = SubResource("GradientTexture2D_kvaex")
+texture_progress = SubResource("GradientTexture2D_rv3oe")
