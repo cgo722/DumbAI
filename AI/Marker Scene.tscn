@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://7vrql8erem5t"]
+
+[node name="MarkerScene" type="Node3D"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]

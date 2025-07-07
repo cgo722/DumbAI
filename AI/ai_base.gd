@@ -62,6 +62,12 @@ var just_spawned := true
 
 var frozen := false
 
+@export var drop_marker_scene: PackedScene
+var drop_marker: Node3D = null
+var drop_raycast: RayCast3D = null
+
+var gravity_enabled := true
+
 func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 	var nav_map = nav_agent.get_navigation_map()
 	if nav_map == null:
@@ -311,6 +317,25 @@ func _ready():
 	NavigationServer3D.map_changed.connect(_on_nav_map_changed)
 	# Optionally, you can also call _check_nav_ready() after a short delay
 	get_tree().create_timer(0.1).timeout.connect(_on_spawn_delay_timeout)
+	# Create a RayCast3D pointing down for drop marker
+	drop_raycast = RayCast3D.new()
+	drop_raycast.target_position = Vector3(0, -10, 0)
+	drop_raycast.enabled = true
+	add_child(drop_raycast)
+	# Instance custom drop marker asset if provided
+	if drop_marker_scene:
+		drop_marker = drop_marker_scene.instantiate()
+		drop_marker.visible = false
+		add_child(drop_marker)
+	else:
+		# Fallback: create a default disc marker
+		drop_marker = MeshInstance3D.new()
+		drop_marker.mesh = CylinderMesh.new()
+		drop_marker.scale = Vector3(0.4, 0.01, 0.4)
+		drop_marker.material_override = StandardMaterial3D.new()
+		drop_marker.material_override.albedo_color = Color(0, 0, 0, 0.5)
+		drop_marker.visible = false
+		add_child(drop_marker)
 
 func _on_nav_map_changed(nav_map_id):
 	# Only set nav_ready if this is our agent's map
@@ -340,7 +365,16 @@ func _process(delta):
 		tick_state(ai_state, null, delta)
 	else:
 		print("AI state is NULL, no action taken.")
-	pass
+	# Only apply gravity if enabled
+	if gravity_enabled:
+		if not is_on_floor():
+			self.velocity.y -= gravity * delta
+		else:
+			if not _was_on_floor:
+				# Just landed, reset vertical velocity
+				self.velocity.y = 0.0
+		_was_on_floor = is_on_floor()
+	move_and_slide()
 
 func ai_state_from_string(state_name: String) -> AIState:
 	match state_name.to_upper():
@@ -392,17 +426,42 @@ func on_pickup():
 		return
 	if not is_being_held:
 		is_being_held = true
+		gravity_enabled = false
 		original_y = global_transform.origin.y
 		var pos = global_transform.origin
 		pos.y += held_height
 		global_transform.origin = pos
+		# Use raycast to find floor and snap marker (show marker when picked up)
+		if drop_raycast and drop_marker:
+			drop_raycast.global_transform.origin = global_transform.origin
+			drop_raycast.force_raycast_update()
+			if drop_raycast.is_colliding():
+				var hit_pos = drop_raycast.get_collision_point()
+				if drop_marker is Node3D:
+					drop_marker.global_transform.origin = hit_pos + Vector3(0, 0.02, 0)
+					drop_marker.visible = true
+				elif drop_marker.has_method("set_position"):
+					drop_marker.set_position(hit_pos + Vector3(0, 0.02, 0))
+					drop_marker.visible = true
+			else:
+				print("Drop marker: Raycast did not hit the floor.")
+		else:
+			print("Drop marker: Raycast or marker not set up.")
 
 func on_release():
 	if is_being_held:
 		is_being_held = false
+		gravity_enabled = true
 		var pos = global_transform.origin
 		pos.y = original_y
 		global_transform.origin = pos
+		# Hide marker when released
+		if drop_marker:
+			drop_marker.visible = false
+
+func _hide_drop_marker():
+	if drop_marker:
+		drop_marker.visible = false
 
 func _on_spawn_delay_timeout():
 	just_spawned = false

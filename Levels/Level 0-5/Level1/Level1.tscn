@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=3 uid="uid://ecbfgxyyhwd4"]
+
+[ext_resource type="PackedScene" uid="uid://d4i5b3vbkb4e2" path="res://Level Design/box.tscn" id="1_ea7mm"]
+[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_n6p2h"]
+[ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="1_use24"]
+[ext_resource type="Resource" uid="uid://b4o1b53no5jbv" path="res://Levels/Level 0-5/Level1/Level1_Config.tres" id="2_361rx"]
+[ext_resource type="PackedScene" uid="uid://bb6suvyhofdm5" path="res://Zones/Work/Work Zones.tscn" id="2_kec2h"]
+[ext_resource type="LightmapGIData" uid="uid://bjf2uq2nnds2r" path="res://Levels/Level 0-5/Level1/Level1.lmbake" id="3_ih2p4"]
+[ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="4_use24"]
+[ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Zones/Danger/Danger_Zone_Base.tscn" id="4_vgwv3"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_ea7mm"]
+vertices = PackedVector3Array(6.5, 0.700001, 5, 7.5, 0.700001, -7, 7.5, 0.700001, -8.75, -8.75, 0.700001, -8.75, -8.75, 0.700001, 5.75)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 4)]
+cell_height = 0.1
+
+[node name="Level1" type="Node3D"]
+script = ExtResource("1_n6p2h")
+level_config = ExtResource("2_361rx")
+ai_scene = ExtResource("4_use24")
+danger_zone_scene = ExtResource("4_vgwv3")
+
+[node name="MobileInput" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("1_use24")]
+camera = NodePath("../Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.713813, -0.331601, 0.616856, 0, 0.8808, 0.473489, -0.700336, -0.337982, 0.628726, 9.5, 9, 9.5)
+fov = 42.0
+
+[node name="WorkZones" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 3.32947, 0.912301, -2.74421)
+
+[node name="WorkZones2" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 5.32947, 0.912301, 1.8447)
+current_state = "THRILLSEEKER"
+
+[node name="WorkZones3" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 6.32947, 0.912301, -5.29831)
+
+[node name="WorkZones4" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -1.13536, 0.912301, -0.744213)
+current_state = "THRILLSEEKER"
+
+[node name="WorkZones5" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -6.13536, 0.912301, 3.8447)
+
+[node name="WorkZones6" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -5.13536, 0.912301, -3.29831)
+
+[node name="WorkZones8" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(-4.37114e-08, 0, -1.7, 0, 1, 0, 1, 0, -7.43094e-08, -1.6344, 0.9123, -7.28864)
+current_state = "THRILLSEEKER"
+
+[node name="WorkZones9" parent="." instance=ExtResource("2_kec2h")]
+transform = Transform3D(-4.37114e-08, 0, -1.7, 0, 1, 0, 1, 0, -7.43094e-08, 3.50861, 0.9123, -8.28864)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_ea7mm")
+
+[node name="Box" parent="NavigationRegion3D" instance=ExtResource("1_ea7mm")]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+
+[node name="Box3" parent="NavigationRegion3D" instance=ExtResource("1_ea7mm")]
+transform = Transform3D(-8.74228e-07, -1, 0, 20, -4.37114e-08, 0, 0, 0, 20, -10, 0, 0)
+
+[node name="Box2" parent="NavigationRegion3D" instance=ExtResource("1_ea7mm")]
+transform = Transform3D(20, 0, 0, 0, -4.37114e-08, -20, 0, 1, -8.74228e-07, 0, 0, -10)
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="NavigationRegion3D"]
+vertices = PackedVector3Array(-1.10148, 0, 11.5714, -9.49571, 0, 10.6063, -10.2247, 0, 5.76836, 6.4091, 0, 5.10183, 7.54221, 0, -9.21166, 14.3034, 0, -9.66883, 11.4748, 0, 12.4753)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, -0.5, 0.707107, 0.5, -0.5, -0.707107, 0.5, 0, 0, 0)
+shadow_enabled = true
+
+[node name="LightmapGI" type="LightmapGI" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+quality = 3
+generate_probes_subdiv = 4
+light_data = ExtResource("3_ih2p4")
+
+[node name="Ai_Spawn" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 1)

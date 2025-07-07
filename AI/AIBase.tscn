@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddvcubqa18bly"]
+[gd_scene load_steps=11 format=3 uid="uid://ddvcubqa18bly"]
 
 [ext_resource type="Script" uid="uid://cmy61jrpxoif6" path="res://AI/ai_base.gd" id="1_hg67l"]
 [ext_resource type="Resource" uid="uid://b5nwa0lp3o8r3" path="res://AI/AI Resources/Aimless.tres" id="2_bhacr"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://cycnrtxfr8aqi" path="res://AI/AI Resources/Follower.tres" id="4_81606"]
 [ext_resource type="Resource" uid="uid://sgyp6bwvasx3" path="res://AI/AI Resources/Thrillseeker.tres" id="5_0ybt8"]
 [ext_resource type="Resource" uid="uid://djnn55yk60d86" path="res://AI/AI Resources/Coward.tres" id="6_jhgg7"]
+[ext_resource type="PackedScene" uid="uid://7vrql8erem5t" path="res://AI/Marker Scene.tscn" id="7_jhgg7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_33lc0"]
 
@@ -20,6 +21,7 @@ collision_mask = 3
 script = ExtResource("1_hg67l")
 ai_brain = Array[Resource]([ExtResource("2_bhacr"), ExtResource("3_33lc0"), ExtResource("4_81606"), ExtResource("5_0ybt8"), ExtResource("6_jhgg7")])
 mesh_instance = NodePath("CollisionShape3D/MeshInstance3D")
+drop_marker_scene = ExtResource("7_jhgg7")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 

@@ -1,13 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://d4i5b3vbkb4e2"]
+[gd_scene load_steps=4 format=4 uid="uid://d4i5b3vbkb4e2"]
 
-[ext_resource type="Material" uid="uid://dgjiw8udooecr" path="res://addons/prototype_mini_bundle/M_prototype_dark.tres" id="1_o55t5"]
+[ext_resource type="Material" uid="uid://7to3kb1tisdd" path="res://addons/prototype_mini_bundle/M_prototype_orange.tres" id="1_o55t5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wfgot"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_o55t5"]
+lightmap_size_hint = Vector2i(70, 46)
+_surfaces = [{
+"aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("AACAPwAAgD/jK34/pzd9PwAAgD8AAAAAFl8xP6c3fT8AAAAAAAAAABZfMT8LWQg/AACAPwAAgD8WXzE/QxYyPAAAgD8AAAAA4yt+P0MWMjwAAAAAAAAAAOMrfj/qTe8+AACAPwAAgD9mZiY/pzd9PwAAgD8AAAAAMzOzPqc3fT8AAAAAAAAAADMzsz4LWQg/AAAAAAAAgD/jK34/C1kIPwAAgD8AAIA/ZmYmP0MWMjwAAIA/AAAAAGZmJj/qTe8+AAAAAAAAAAAzM7M+6k3vPgAAAAAAAAAA1EGdPqc3fT8AAAAAAACAP6EO6junN30/AACAPwAAgD+hDuo7C1kIPwAAAAAAAIA/Fl8xP+pN7z4AAAAAAACAPzMzsz5DFjI8AACAPwAAgD/UQZ0+QxYyPAAAgD8AAAAA1EGdPupN7z4AAAAAAAAAAKEO6jvqTe8+AAAAAAAAgD9mZiY/C1kIPwAAgD8AAAAA1EGdPgtZCD8AAAAAAACAP6EO6jtDFjI8"),
+"format": 34359742519,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgAAgAJAAAACgALAAwADQAOAA8ABQAQAAMADAARAAoAEgATABQACAAVAAYADwAWAA0AFAAXABIA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAvwAAAL8AAAA/AAAAvwAAAL8AAAC/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAL8AAAC/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAC/AAAAvwAAAL8AAAC/AAAAPwAAAL8AAAC/AAAAvwAAAD8AAAA/AAAAvwAAAL8AAAA/AAAAvwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/AAAAvwAAAD8AAAA/AAAAvwAAAD8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAA/AAAAPwAAAL8AAAC/AAAAPwAAAL8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAPwAAAD8AAAC/AAAAgP9//n8AAACA/3/+fwAAAID/f/5/AIAAAP//AAAAgAAA//8AAACAAAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAAAgP9//n//f/9/AAD/P/9//38AAP8//3//fwAA/z8AgP////8AAACA/////wAAAID/////AAAAgAAA//8AAP9//38AAP8///8AgP9//n///wCA/3/+f///AID/f/5//////wAA/z8AgP////8AAP//AID/f/5/")
+}]
 
 [node name="Box" type="StaticBody3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_wfgot")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[node name="CSGBakedMeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = ExtResource("1_o55t5")
+mesh = SubResource("ArrayMesh_o55t5")

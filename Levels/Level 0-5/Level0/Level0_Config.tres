@@ -9,10 +9,10 @@ ai_spawns = Array[Dictionary]([{
 "brain_index": 0,
 "position": NodePath("AI_Spawn")
 }])
-danger_zone_count = 1
+danger_zone_count = 3
 work_zone_count = 4
 danger_zone_scales = Array[Vector3]([Vector3(1.7, 1, 1.7)])
-danger_zone_spawn_delay = 10.0
+danger_zone_spawn_delay = 7.0
 danger_zone_max = 5
 danger_zone_initial_delay = 7.0
 work_zone_markers = Array[NodePath]([NodePath("WorkZone Marker0"), NodePath("WorkZone Marker1"), NodePath("WorkZone Marker2")])

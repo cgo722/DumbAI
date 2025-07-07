@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjf1y8qek2ydh"]
+
+[ext_resource type="Material" uid="uid://brj2jayoo0l0d" path="res://addons/prototype_mini_bundle/M_prototype_blue.tres" id="1_4oc7n"]
+
+[node name="Cylinder" type="Node3D"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+material_override = ExtResource("1_4oc7n")
