@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_kbl3s")
 ai_state_name = "AIMLESS"
-speed = 4.0
+speed = 2.0
 jump_height = 300.0
 detection_range = 50.0
 reaction_delay = 0.5

@@ -24,37 +24,38 @@ danger_zone_scene = ExtResource("4_vgwv3")
 camera = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.713813, -0.331601, 0.616856, 0, 0.8808, 0.473489, -0.700336, -0.337982, 0.628726, 9.5, 9, 9.5)
+transform = Transform3D(0.713813, -0.331601, 0.616856, 0, 0.8808, 0.473488, -0.700336, -0.337982, 0.628727, 15.5, 11, 15.5)
 fov = 42.0
 
 [node name="WorkZones" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 3.32947, 0.912301, -2.74421)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 5.31348, 0.983258, -2.95615)
 
 [node name="WorkZones2" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 5.32947, 0.912301, 1.8447)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 8.71348, 0.983258, 4.845)
 current_state = "THRILLSEEKER"
 
 [node name="WorkZones3" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, 6.32947, 0.912301, -5.29831)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 10.4135, 0.983258, -7.29812)
 
 [node name="WorkZones4" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -1.13536, 0.912301, -0.744213)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -2.27673, 0.983258, 0.443843)
 current_state = "THRILLSEEKER"
 
 [node name="WorkZones5" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -6.13536, 0.912301, 3.8447)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -10.7767, 0.983258, 8.245)
 
 [node name="WorkZones6" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.7, -5.13536, 0.912301, -3.29831)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -9.07673, 0.983258, -3.89812)
 
 [node name="WorkZones8" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(-4.37114e-08, 0, -1.7, 0, 1, 0, 1, 0, -7.43094e-08, -1.6344, 0.9123, -7.28864)
+transform = Transform3D(-7.43094e-08, 0, -2.89, 0, 1.7, 0, 1.7, 0, -1.26326e-07, -3.1251, 0.983256, -10.6817)
 current_state = "THRILLSEEKER"
 
 [node name="WorkZones9" parent="." instance=ExtResource("2_kec2h")]
-transform = Transform3D(-4.37114e-08, 0, -1.7, 0, 1, 0, 1, 0, -7.43094e-08, 3.50861, 0.9123, -8.28864)
+transform = Transform3D(-7.43094e-08, 0, -2.89, 0, 1.7, 0, 1.7, 0, -1.26326e-07, 5.61802, 0.983256, -12.3817)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -0.34662, -0.567654, 1.70901)
 navigation_mesh = SubResource("NavigationMesh_ea7mm")
 
 [node name="Box" parent="NavigationRegion3D" instance=ExtResource("1_ea7mm")]
@@ -83,3 +84,12 @@ light_data = ExtResource("3_ih2p4")
 
 [node name="Ai_Spawn" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 1)
+
+[node name="Ai_Spawn2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, 2)
+
+[node name="Ai_Spawn3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -9)
+
+[node name="Ai_Spawn4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2, -2)

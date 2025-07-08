@@ -8,10 +8,19 @@ level_hash = 75
 ai_spawns = Array[Dictionary]([{
 "brain_index": 3,
 "position": NodePath("Ai_Spawn")
-}, {}])
+}, {
+"brain_index": 0,
+"position": NodePath("Ai_Spawn2")
+}, {
+"brain_index": 0,
+"position": NodePath("Ai_Spawn4")
+}, {
+"brain_index": 3,
+"position": NodePath("Ai_Spawn3")
+}])
 danger_zone_count = 10
 work_zone_count = 1
-danger_zone_scales = Array[Vector3]([Vector3(1.7, 1, 1.7), Vector3(1.3, 1, 1.3)])
+danger_zone_scales = Array[Vector3]([Vector3(2.7, 1, 2.7), Vector3(1.7, 1, 1.7)])
 danger_zone_spawn_delay = 6.0
 danger_zone_max = 5
 danger_zone_initial_delay = 10.0

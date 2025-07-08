@@ -27,9 +27,10 @@ grow_vertical = 2
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 246
-text = "Title"
+theme_override_font_sizes/font_size = 136
+text = "Bad Management"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
