@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://30h28q7nxajo"]
+[gd_scene load_steps=10 format=3 uid="uid://30h28q7nxajo"]
 
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_a8p64"]
 [ext_resource type="Resource" uid="uid://btxcqgp77g8kc" path="res://Levels/Level 0-5/Level0/Level0_Config.tres" id="2_83fq7"]
@@ -10,23 +10,8 @@
 [ext_resource type="LightmapGIData" uid="uid://bsmx25wkctkt7" path="res://Levels/Level 0-5/Level0/Level0.lmbake" id="8_ntn8y"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_83fq7"]
-vertices = PackedVector3Array(-121, 1, -121, -121, 1, 121, 121, 1, 121, 121, 1, -121)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_83fq7"]
-sky_curve = 0.204906
-ground_curve = 0.0800003
-sun_curve = 0.121838
-
-[sub_resource type="Sky" id="Sky_5qwvv"]
-sky_material = SubResource("ProceduralSkyMaterial_83fq7")
-
-[sub_resource type="Environment" id="Environment_83fq7"]
-background_mode = 2
-sky = SubResource("Sky_5qwvv")
-fog_light_color = Color(0.493814, 0.551576, 0.665627, 1)
-fog_light_energy = 0.56
-fog_density = 0.0
+vertices = PackedVector3Array(-121.054, 0.796074, -121, -121.054, 0.796074, -30.5, 121.196, 0.796074, -30.5, 121.196, 0.796074, -121, -15.8037, 0.796074, -13.5, -11.0537, 0.796074, -13.75, -12.3037, 0.796074, -18, -23.3037, 0.796074, 19.25, -22.5537, 0.796074, 16.75, -28.5537, 0.796074, 16.25, -10.8037, 0.796074, -18, -11.0537, 0.796074, -28.25, -28.8037, 0.796074, 15.5, -121.054, 0.796074, -28.25, -22.0537, 0.796074, 121, -22.3037, 0.796074, 19.25, -121.054, 0.796074, 121, 2.94632, 0.796074, -18.75, 2.94632, 0.796074, -28.25, 24.6963, 0.796074, -20, 24.1963, 0.796074, -28.25, 25.1963, 0.796074, 12.5, 25.1963, 0.796074, 13.25, 29.6963, 0.796074, 14, 121.196, 0.796074, -28.25, 31.4463, 0.796074, -8.50001, 24.6963, 0.796074, 14.5, 23.9463, 0.796074, 18, 23.4463, 0.796074, 18.5, 23.4463, 0.796074, 121, 121.196, 0.796074, 121, 25.4463, 0.796074, -20, 25.6963, 0.796074, -13.5, 30.6963, 0.796074, -10, 31.4463, 0.796074, -9.25001, -10.5537, 0.796074, 5.99999, -10.5537, 0.796074, 6.99999, -10.0537, 0.796074, 7.24999, 11.9463, 0.796074, 10.75, 20.9463, 0.796074, -10.75, -8.05368, 0.796074, -11, 10.9463, 0.796074, 17.5, 8.69632, 0.796074, 16.75, -7.05368, 0.796074, 18, 18.1963, 0.796074, 18, -7.05368, 0.796074, 121, 17.9463, 0.796074, 121, -20.8037, 0.796074, 19, -20.8037, 0.796074, 121)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(6, 5, 4), PackedInt32Array(7, 9, 8), PackedInt32Array(11, 10, 6), PackedInt32Array(11, 6, 4), PackedInt32Array(4, 12, 11), PackedInt32Array(11, 12, 13), PackedInt32Array(7, 15, 14), PackedInt32Array(7, 14, 9), PackedInt32Array(9, 14, 16), PackedInt32Array(9, 16, 13), PackedInt32Array(9, 13, 12), PackedInt32Array(18, 17, 11), PackedInt32Array(11, 17, 10), PackedInt32Array(20, 19, 18), PackedInt32Array(18, 19, 17), PackedInt32Array(22, 21, 23), PackedInt32Array(23, 21, 25), PackedInt32Array(23, 25, 24), PackedInt32Array(27, 26, 23), PackedInt32Array(27, 23, 28), PackedInt32Array(28, 23, 24), PackedInt32Array(28, 24, 29), PackedInt32Array(29, 24, 30), PackedInt32Array(31, 19, 20), PackedInt32Array(33, 32, 31), PackedInt32Array(33, 31, 34), PackedInt32Array(34, 31, 20), PackedInt32Array(34, 20, 24), PackedInt32Array(25, 34, 24), PackedInt32Array(36, 35, 37), PackedInt32Array(37, 35, 40), PackedInt32Array(37, 40, 38), PackedInt32Array(38, 40, 39), PackedInt32Array(43, 42, 41), PackedInt32Array(41, 44, 43), PackedInt32Array(43, 44, 46), PackedInt32Array(43, 46, 45), PackedInt32Array(48, 47, 45), PackedInt32Array(45, 47, 43), PackedInt32Array(29, 46, 28), PackedInt32Array(28, 46, 44), PackedInt32Array(14, 15, 48), PackedInt32Array(48, 15, 47)]
 
 [node name="Level0" type="Node3D"]
 transform = Transform3D(2.35332, 0, 0, 0, 1.83125, 0, 0, 0, 2.51988, 0, 0, 0)
@@ -42,6 +27,29 @@ navigation_mesh = SubResource("NavigationMesh_83fq7")
 [node name="Box" parent="NavigationRegion3D" instance=ExtResource("6_6c5r5")]
 transform = Transform3D(243, 0, 0, 0, 1, 0, 0, 0, 243, 0, 0, 0)
 
+[node name="Box2" parent="NavigationRegion3D" instance=ExtResource("6_6c5r5")]
+transform = Transform3D(500, 0, 0, 0, 100, 0, 0, 0, 1, 22.9463, 0.546075, -29.3665)
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="NavigationRegion3D"]
+vertices = PackedVector3Array(22.9664, 0, -15.8133, 31.4794, 0, -9.17344, 23.6213, 0, 18.609, 9.21464, 0, 17.2111)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="NavigationObstacle3D2" type="NavigationObstacle3D" parent="NavigationRegion3D"]
+vertices = PackedVector3Array(-12.3953, 0, -17.9101, 25.3987, 0, -19.9195, 25.8665, 0, -10.9208, -9.96303, 0, -11.0081)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="NavigationObstacle3D3" type="NavigationObstacle3D" parent="NavigationRegion3D"]
+vertices = PackedVector3Array(-15.576, 0, -13.6291, -7.62429, 0, -13.6291, -12.1147, 0, 17.7353, -28.9536, 0, 16.0754)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
+[node name="NavigationObstacle3D4" type="NavigationObstacle3D" parent="NavigationRegion3D"]
+vertices = PackedVector3Array(-18.0083, 0, 5.76616, 29.702, 0, 13.8912, 9.96303, 0, 16.7743, -23.4342, 0, 19.2206)
+affect_navigation_mesh = true
+carve_navigation_mesh = true
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.627311, 0.778769, 0, -0.778769, 0.627311, 0, 0, 0)
 shadow_enabled = true
@@ -50,7 +58,7 @@ shadow_enabled = true
 transform = Transform3D(0.923891, 0, 0, 0, 0.923891, 0, 0, 0, 0.923891, 0.177996, 0, -0.0255116)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.410452, 0.0410565, -0.0941482, 0, 0.500551, 0.218282, 0.10998, -0.153225, 0.351366, -3.39945, 6.82587, 12.5434)
+transform = Transform3D(0.408452, 0.0466523, -0.107504, 0, 0.50094, 0.217387, 0.109444, -0.151853, 0.349926, -3.39945, 6.82587, 12.5434)
 current = true
 fov = 77.4
 size = 25.503
@@ -66,9 +74,6 @@ transform = Transform3D(1.553, 0, 0, 0, 1, 0, 0, 0, 1.302, 5.52411, 0.546075, -2
 
 [node name="WorkZones3" parent="." instance=ExtResource("5_73ye2")]
 transform = Transform3D(1.553, 0, 0, 0, 1, 0, 0, 0, 1.302, 6.37397, 0.546075, 6.74635)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_83fq7")
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 generate_probes_subdiv = 4

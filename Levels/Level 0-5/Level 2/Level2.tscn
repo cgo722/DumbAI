@@ -1,3 +1,201 @@
-[gd_scene format=3 uid="uid://dr2sbij460fj1"]
+[gd_scene load_steps=11 format=3 uid="uid://dr2sbij460fj1"]
+
+[ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_1q1tk"]
+[ext_resource type="PackedScene" uid="uid://cjf1y8qek2ydh" path="res://Level Design/Cylinder.tscn" id="2_6xt7w"]
+[ext_resource type="Resource" uid="uid://cb6edfys4sfqq" path="res://Levels/Level 0-5/Level 2/Level2_config.tres" id="2_jvreu"]
+[ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="3_av7i5"]
+[ext_resource type="PackedScene" uid="uid://d4i5b3vbkb4e2" path="res://Level Design/box.tscn" id="3_cd8n7"]
+[ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Zones/Danger/Danger_Zone_Base.tscn" id="4_0ga5k"]
+[ext_resource type="LightmapGIData" uid="uid://buuw5p7e6cje3" path="res://Levels/Level 0-5/Level 2/Level2.lmbake" id="4_am47c"]
+[ext_resource type="PackedScene" uid="uid://bb6suvyhofdm5" path="res://Zones/Work/Work Zones.tscn" id="5_6xt7w"]
+[ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="5_av7i5"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_jvreu"]
+vertices = PackedVector3Array(-35.25, 25.75, -25.65, -35.25, 25.75, -12.15, 35.25, 25.75, -12.15, 35.25, 25.75, -25.65, 0.25, 0.75, -16.15, 2, 0.75, -16.4, 2, 0.75, -24.15, -24, 0.75, 9.85, -11.25, 0.75, 9.85, -11, 0.75, 8.1, -24, 0.75, -24.15, 0.25, 0.75, 8.1, -10, 9.75, -10.65, -8.25, 9.75, -10.9, -8.5, 9.75, -24.15, -24, 9.75, -8.65, -10, 9.75, -8.65, -24, 9.75, -24.15, 20, 9.75, -10.9, 20, 9.75, -24.15, 3.75, 0.75, -16.15, 15, 0.75, 8.1, 15.25, 0.75, 9.85, 23.25, 0.75, 9.85, 23.25, 0.75, -24.15, 3.75, 0.75, 8.1, 1.25, 2.25, 6.85, 2.75, 2.25, 6.85, 2.75, 2.25, -15.4, 1.25, 2.25, -15.4, -24, 9.75, 19.1, -10, 9.75, 19.1, -35.25, 25.75, -6.65, -35.25, 25.75, 6.85, 35.25, 25.75, 6.85, 35.25, 25.75, -6.65, 3, 2.25, 9.1, 1, 2.25, 9.1, -10.25, 2.25, 10.85, 14.25, 2.25, 10.85, -10.25, 2.25, 9.1, 14.25, 2.25, 9.1, -9.75, 0.75, 23.1, -9.5, 0.75, 11.85, -11.25, 0.75, 11.6, -24, 0.75, 23.1, 15.25, 0.75, 11.6, 13.5, 0.75, 11.85, 13.75, 0.75, 23.1, 23.25, 0.75, 23.1, -35.25, 25.75, 11.35, -35.25, 25.75, 24.6, 35.25, 25.75, 24.6, 35.25, 25.75, 11.35)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(6, 5, 4), PackedInt32Array(9, 8, 7), PackedInt32Array(6, 4, 10), PackedInt32Array(10, 4, 9), PackedInt32Array(10, 9, 7), PackedInt32Array(4, 11, 9), PackedInt32Array(14, 13, 12), PackedInt32Array(12, 16, 15), PackedInt32Array(14, 12, 17), PackedInt32Array(17, 12, 15), PackedInt32Array(18, 13, 19), PackedInt32Array(19, 13, 14), PackedInt32Array(20, 5, 6), PackedInt32Array(23, 22, 21), PackedInt32Array(6, 24, 20), PackedInt32Array(20, 24, 21), PackedInt32Array(21, 24, 23), PackedInt32Array(21, 25, 20), PackedInt32Array(29, 28, 26), PackedInt32Array(26, 28, 27), PackedInt32Array(31, 30, 16), PackedInt32Array(16, 30, 15), PackedInt32Array(35, 34, 32), PackedInt32Array(32, 34, 33), PackedInt32Array(27, 36, 26), PackedInt32Array(26, 36, 37), PackedInt32Array(36, 39, 37), PackedInt32Array(37, 39, 38), PackedInt32Array(38, 40, 37), PackedInt32Array(36, 41, 39), PackedInt32Array(43, 42, 44), PackedInt32Array(44, 42, 45), PackedInt32Array(44, 45, 7), PackedInt32Array(7, 8, 44), PackedInt32Array(46, 22, 23), PackedInt32Array(48, 47, 46), PackedInt32Array(48, 46, 49), PackedInt32Array(49, 46, 23), PackedInt32Array(53, 52, 50), PackedInt32Array(50, 52, 51), PackedInt32Array(43, 47, 42), PackedInt32Array(42, 47, 48)]
 
 [node name="Level2" type="Node3D"]
+script = ExtResource("1_1q1tk")
+level_config = ExtResource("2_jvreu")
+ai_scene = ExtResource("3_av7i5")
+danger_zone_scene = ExtResource("4_0ga5k")
+
+[node name="MobileInput" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("5_av7i5")]
+camera = NodePath("../Camera3D")
+
+[node name="Cylinder" parent="." instance=ExtResource("2_6xt7w")]
+transform = Transform3D(1, 0, 0, 0, 5.73, 0, 0, 0, 1, 16, 4, -24)
+
+[node name="NavigationLink3D" type="NavigationLink3D" parent="Cylinder"]
+transform = Transform3D(1, 0, 0, 0, 0.17452, 0, 0, 0, 1, 0, -0.69808, 0)
+end_position = Vector3(0, 9.455, 0)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_jvreu")
+
+[node name="Box" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(50, 0, 0, 0, 0.5, 0, 0, 0, 50, 0, 0, 0)
+
+[node name="Box13" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, 0)
+
+[node name="Box14" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, 18)
+
+[node name="Box15" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, -19)
+
+[node name="Box4" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(15, 0, 0, 0, 0.5, 0, 0, 0, 45, -17, 9, -3)
+
+[node name="Box5" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-6.55671e-07, 0, 45, 0, 0.5, 0, -15, 0, -1.96701e-06, -2, 9, -18)
+
+[node name="Box2" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -50, 0, 0.5, -2.18557e-06, 0, 0, -25)
+
+[node name="Box6" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -50, 0, 0.5, -2.18557e-06, 0, -17, 24)
+
+[node name="Box8" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -10, 0, 0.5, -4.37114e-07, 0, 20, 24)
+
+[node name="Box9" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-5, 0, 0, 0, -2.18557e-08, -10, 0, 0.5, -4.37114e-07, 21, 11, 24)
+
+[node name="Box10" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-5, 0, 0, 0, -2.18557e-08, -10, 0, 0.5, -4.37114e-07, 6, 11, 24)
+
+[node name="Box11" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-5, 0, 0, 0, -2.18557e-08, -10, 0, 0.5, -4.37114e-07, -9, 11, 24)
+
+[node name="Box12" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-5, 0, 0, 0, -2.18557e-08, -10, 0, 0.5, -4.37114e-07, -23, 11, 24)
+
+[node name="Box3" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-2.18557e-06, -0.5, 0, -2.18557e-06, 9.55343e-16, -50, 50, -2.18557e-08, -2.18557e-06, -25, 0, 0)
+
+[node name="Box7" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-2.18557e-06, -0.5, 0, -2.18557e-06, 9.55343e-16, -50, 50, -2.18557e-08, -2.18557e-06, 24, 0, 0)
+
+[node name="Box16" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(25.375, 0, 0, 0, 1.848, 0, 0, 0, 2.4, 2, 1, 10)
+
+[node name="Box17" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
+transform = Transform3D(-1.10918e-06, 0, -2.4, 0, 1.848, 0, 25.375, 0, -1.04907e-07, 2, 1, -3)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, -0.12941, 0.524519, 0.841506, -0.482963, -0.774519, 0.408494, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 23, 21, 22)
+
+[node name="LightmapGI" type="LightmapGI" parent="."]
+generate_probes_subdiv = 4
+light_data = ExtResource("4_am47c")
+
+[node name="WorkZones" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 7.3788, -23, 1, 9)
+
+[node name="WorkZones2" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 7.3788, -23, 1, -12)
+
+[node name="WorkZones3" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 13, 1, -4)
+
+[node name="WorkZones9" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 3, 1, -24)
+
+[node name="WorkZones4" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 0, 1, 18)
+
+[node name="WorkZones5" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -23, 10, 14)
+
+[node name="WorkZones6" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -8, 10, -23)
+
+[node name="WorkZones7" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, 13, 10, -14)
+
+[node name="WorkZones8" parent="." instance=ExtResource("5_6xt7w")]
+transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -22, 10, -12)
+
+[node name="AI_SpawnPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+
+[node name="AI_SpawnPoint2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 14)
+
+[node name="AI_SpawnPoint3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 1)
+
+[node name="AI_SpawnPoint4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, -19)
+
+[node name="AI_SpawnPoint5" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 11, 6)
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -17, 23, 13)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 16.0
+spot_angle = 23.6831
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -17, 23, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 16.0
+spot_angle = 23.6831
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3, 23, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 16.0
+spot_angle = 23.6831
+
+[node name="SpotLight3D5" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 16, 23, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 16.0
+spot_angle = 23.6831
+
+[node name="SpotLight3D6" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -17, 9, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 47.1911
+
+[node name="SpotLight3D10" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -18, 9, -2)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 47.1911
+
+[node name="SpotLight3D11" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -18, 9, 12)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 47.1911
+
+[node name="SpotLight3D7" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1, 9, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 11.0
+spot_angle = 37.075
+
+[node name="SpotLight3D8" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 16, 9, -18)
+light_energy = 16.0
+shadow_enabled = true
+spot_range = 10.0
+spot_angle = 44.6203

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="LevelConfig" load_steps=2 format=3 uid="uid://cb6edfys4sfqq"]
+
+[ext_resource type="Script" uid="uid://dypsirafxaxm6" path="res://Levels/Resources/level_config.gd" id="1_s7w6n"]
+
+[resource]
+script = ExtResource("1_s7w6n")
+level_hash = 6075
+ai_spawns = Array[Dictionary]([{
+"brain_index": 0,
+"position": NodePath("AI_SpawnPoint")
+}, {
+"brain_index": 0,
+"position": NodePath("AI_SpawnPoint2")
+}, {
+"brain_index": 0,
+"position": NodePath("AI_SpawnPoint3")
+}, {
+"brain_index": 0,
+"position": NodePath("AI_SpawnPoint4")
+}, {
+"brain_index": 0,
+"position": NodePath("AI_SpawnPoint5")
+}])
+danger_zone_count = 300
+work_zone_count = 1
+danger_zone_scales = Array[Vector3]([Vector3(2, 1, 2), Vector3(2.5, 1, 2.5), Vector3(3, 1, 3)])
+danger_zone_spawn_delay = 6.0
+danger_zone_max = 10
+danger_zone_initial_delay = 4.0
+work_zone_markers = Array[NodePath]([])
+metadata/_custom_type_script = "uid://dypsirafxaxm6"
