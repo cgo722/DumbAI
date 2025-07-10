@@ -8,3 +8,4 @@ class_name AI_Brain
 @export var reaction_delay: float = 0.5     # Seconds delay before reacting
 @export var vertex_color: Color = Color(1, 1, 1)  # Default to white
 @export var leave_chance : float = 1
+@export var min_wander_distance: float = 25.0 # Minimum distance for wander destinations

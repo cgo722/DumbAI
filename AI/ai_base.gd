@@ -68,6 +68,8 @@ var drop_raycast: RayCast3D = null
 
 var gravity_enabled := true
 
+@export var min_wander_distance: float = 4.0  # Minimum distance for wander destinations
+
 func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 	var nav_map = nav_agent.get_navigation_map()
 	if nav_map == null:
@@ -90,6 +92,28 @@ func get_random_navmesh_point(center: Vector3, radius: float) -> Vector3:
 
 		tries += 1
 	return center  # fallback if no valid point found
+
+func get_random_navmesh_point_anywhere() -> Vector3:
+	var nav_map = nav_agent.get_navigation_map()
+	if nav_map == null:
+		return global_transform.origin
+	# Get the navmesh bounding box (approximate)
+	var aabb = nav_agent.get_parent().get_aabb() if nav_agent.get_parent().has_method("get_aabb") else null
+	if aabb == null:
+		return global_transform.origin
+	var best_point = global_transform.origin
+	var best_dist = -1.0
+	var y = global_transform.origin.y
+	for i in range(50):
+		var rand_x = randf_range(aabb.position.x, aabb.position.x + aabb.size.x)
+		var rand_z = randf_range(aabb.position.z, aabb.position.z + aabb.size.z)
+		var candidate = Vector3(rand_x, y, rand_z)
+		var closest = NavigationServer3D.map_get_closest_point(nav_map, candidate)
+		var dist = global_transform.origin.distance_to(closest)
+		if dist > best_dist:
+			best_dist = dist
+			best_point = closest
+	return best_point
 
 func check_stuck(delta):
 	if global_transform.origin.distance_to(last_position) < stuck_distance_threshold:
@@ -132,58 +156,49 @@ func tick_state(state, _blob, delta):
 		return
 
 	check_stuck(delta)
-	if state == AIState.AIMLESS:
-		if nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
-			var tries := 0
-			while tries < 10:
-				var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
-				if global_transform.origin.distance_to(new_destination) > 1.0:
-					destination = new_destination
-					set_destination(destination)
-					nav_agent.set_target_position(destination)
-					break
-				tries += 1
 
-	if state == AIState.JUMPER:
-		if nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
-			var tries := 0
-			while tries < 10:
-				var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
-				if global_transform.origin.distance_to(new_destination) > 1.0:
-					destination = new_destination
+	# Only pick a new destination when navigation is finished or just arrived
+	if nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
+		match state:
+			AIState.AIMLESS, AIState.JUMPER, AIState.THRILLSEEKER, AIState.COWARD:
+				var best_distance := -1.0
+				var best_destination := global_transform.origin
+				for i in range(10):
+					# Use a random point anywhere on the navmesh
+					var candidate = get_random_navmesh_point_anywhere()
+					var dist = global_transform.origin.distance_to(candidate)
+					if dist > chosen_brain.min_wander_distance and dist > best_distance:
+						best_distance = dist
+						best_destination = candidate
+				if best_distance > chosen_brain.min_wander_distance:
+					destination = best_destination
 					set_destination(destination)
-					break
-				tries += 1
+			AIState.FOLLOWER:
+				# Follower logic handled below
+				pass
 
 	match state:
 		AIState.THRILLSEEKER:
 			# If no focused danger or it's invalid, find a new one
 			if focused_danger == null or not is_instance_valid(focused_danger):
-				var danger_data := get_nearest_danger()
-				var danger = danger_data[0]
-				var dist = danger_data[1]
-				if danger and dist < chosen_brain.detection_range:
-					focused_danger = danger
-				else:
-					focused_danger = null
-
-			if focused_danger != null:
-				var dist = global_transform.origin.distance_to(focused_danger.global_transform.origin)
-				if dist < chosen_brain.detection_range:
-					nav_agent.set_target_position(focused_danger.global_transform.origin)
-				else:
-					focused_danger = null
-
-			if nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
+				focused_danger = null
+				# Danger disappeared, pick a new random destination immediately
 				var tries := 0
 				while tries < 10:
 					var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
 					if global_transform.origin.distance_to(new_destination) > 1.0:
 						destination = new_destination
 						set_destination(destination)
-						nav_agent.set_target_position(destination)
 						break
 					tries += 1
+			else:
+				var dist = global_transform.origin.distance_to(focused_danger.global_transform.origin)
+				if dist < chosen_brain.detection_range:
+					# Only set target if not already set
+					if nav_agent.get_target_position() != focused_danger.global_transform.origin:
+						nav_agent.set_target_position(focused_danger.global_transform.origin)
+				else:
+					focused_danger = null
 
 			var next_pos = nav_agent.get_next_path_position()
 			var direction = (next_pos - global_transform.origin).normalized()
@@ -192,34 +207,26 @@ func tick_state(state, _blob, delta):
 		AIState.COWARD:
 			# If no focused danger or it's invalid, find a new one
 			if focused_danger == null or not is_instance_valid(focused_danger):
-				var danger_data := get_nearest_danger()
-				var danger = danger_data[0]
-				var dist = danger_data[1]
-				if danger and dist < chosen_brain.detection_range:
-					focused_danger = danger
-				else:
-					focused_danger = null
-
-			if focused_danger != null:
-				var dist = global_transform.origin.distance_to(focused_danger.global_transform.origin)
-				if dist < chosen_brain.detection_range:
-					# Run directly away from the focused danger
-					var escape_direction = (global_transform.origin - focused_danger.global_transform.origin).normalized()
-					var escape_pos = global_transform.origin + escape_direction * aimless_radius
-					nav_agent.set_target_position(escape_pos)
-				else:
-					focused_danger = null  # Lost interest, out of range
-
-			if nav_agent.is_navigation_finished() or global_transform.origin.distance_to(nav_agent.get_target_position()) < 0.5:
+				focused_danger = null
+				# Danger disappeared, pick a new random destination immediately
 				var tries := 0
 				while tries < 10:
 					var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
 					if global_transform.origin.distance_to(new_destination) > 1.0:
 						destination = new_destination
 						set_destination(destination)
-						nav_agent.set_target_position(destination)
 						break
 					tries += 1
+			else:
+				var dist = global_transform.origin.distance_to(focused_danger.global_transform.origin)
+				if dist < chosen_brain.detection_range:
+					# Run directly away from the focused danger
+					var escape_direction = (global_transform.origin - focused_danger.global_transform.origin).normalized()
+					var escape_pos = global_transform.origin + escape_direction * aimless_radius
+					if nav_agent.get_target_position() != escape_pos:
+						nav_agent.set_target_position(escape_pos)
+				else:
+					focused_danger = null  # Lost interest, out of range
 
 			var next_pos = nav_agent.get_next_path_position()
 			var direction = (next_pos - global_transform.origin).normalized()
@@ -452,9 +459,7 @@ func on_release():
 	if is_being_held:
 		is_being_held = false
 		gravity_enabled = true
-		var pos = global_transform.origin
-		pos.y = original_y
-		global_transform.origin = pos
+		# Do not snap Y position back to original_y; leave AI at dropped position
 		# Hide marker when released
 		if drop_marker:
 			drop_marker.visible = false

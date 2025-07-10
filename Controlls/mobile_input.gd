@@ -44,10 +44,21 @@ func _unhandled_input(event):
 			return
 		var from = camera.project_ray_origin(event.position)
 		var to = from + camera.project_ray_normal(event.position) * 1000
-		var intersect = drag_plane.intersects_ray(from, to)
-		if intersect != null:
-			var new_pos = intersect - drag_offset
-			grabbed_agent.global_transform.origin = new_pos
+		# Use a raycast to find the first walkable surface (floor)
+		var space_state = camera.get_world_3d().direct_space_state
+		var params = PhysicsRayQueryParameters3D.new()
+		params.from = from
+		params.to = to
+		params.collision_mask = 1 << 0  # Default to layer 1 for floors, adjust if needed
+		params.exclude = []
+		var result = space_state.intersect_ray(params)
+		if result:
+			var above_floor_pos = result.position + Vector3(0, 5, 0)
+			grabbed_agent.global_transform.origin = above_floor_pos
+			# --- NavMesh region fix: force NavigationAgent3D to update region ---
+			if "nav_agent" in grabbed_agent and grabbed_agent.nav_agent:
+				grabbed_agent.nav_agent.set_navigation_map(grabbed_agent.nav_agent.get_navigation_map())
+				grabbed_agent.nav_agent.set_target_position(above_floor_pos)
 
 func raycast_ai(screen_pos: Vector2) -> Node:
 	var from = camera.project_ray_origin(screen_pos)
