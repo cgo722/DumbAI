@@ -2,8 +2,9 @@ extends Area3D
 
 # The AI's current state in the work zone. Can be set in the editor or by code.
 @export var current_state: String = "IDLE"
-@export var max_health: int = 10
-var health: int
+@export var max_health: float = 20.0
+@export var min_health: float = 0.0
+var health: float
 
 # UI health bar reference (assumes a child Control named HealthBar2D with a TextureProgressBar)
 @onready var health_bar := $HealthBar2D/TextureProgressBar
@@ -13,7 +14,7 @@ var health: int
 func _ready() -> void:
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
-	health = max_health
+	health = 10.0 # Start at midpoint
 	if health_bar_2d:
 		health_bar_2d.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if health_bar:
@@ -36,15 +37,39 @@ func _process(delta):
 			print("Work zone health:", health)
 			damage_timer = 0.0
 			update_health_bar()
-			if health <= 0:
-				print("Work zone destroyed!")
+			if health <= min_health:
+				print("Work zone fully worked!")
+				queue_free()
+	else:
+		# Not being worked, health increases slowly
+		damage_timer += delta
+		if damage_timer >= idle_damage_interval:
+			health += damage_amount
+			print("Work zone health:", health)
+			damage_timer = 0.0
+			update_health_bar()
+			if health >= max_health:
+				print("Work zone failed! Player loses level.")
+				var game_manager = get_tree().get_root().find_child("GameManager", true, false)
+				if game_manager and "lose_level" in game_manager:
+					game_manager.lose_level()
 				queue_free()
 
 func update_health_bar():
 	if health_bar:
-		# Fill increases as damage increases (inverse of health)
-		health_bar.value = max_health - health
-		health_bar.max_value = max_health
+		# Smooth bar fill: normalized between 0 and 1, then scale to max_value
+		var fill_value = clamp((abs(health - 10.0)) / 10.0, 0, 1) * health_bar.max_value
+		health_bar.value = fill_value
+		health_bar.max_value = 10
+		if health < 10.0:
+			# Being worked, fill green
+			health_bar.tint_progress = Color(0, 1, 0)
+		elif health > 10.0:
+			# Not being worked, fill red
+			health_bar.tint_progress = Color(1, 0, 0)
+		else:
+			# Neutral
+			health_bar.tint_progress = Color(1, 1, 1)
 
 # Called when a body enters the area. Signal must be connected in the editor.
 var ai_stopped := false
@@ -52,8 +77,9 @@ var stopped_ai = null
 
 # Damage interval in seconds
 var damage_interval := 1.0
+var idle_damage_interval := 4.0 # 4x slower when idle (health increasing)
 var damage_timer := 0.0
-var damage_amount := 1
+var damage_amount := 1.0
 
 func _on_body_entered(body):
 	if "just_spawned" in body and body.just_spawned:

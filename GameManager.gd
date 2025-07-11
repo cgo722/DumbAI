@@ -22,6 +22,7 @@ var current_hud_instance: Node = null
 var current_win_instance: Node = null
 var current_level_select_instance: Node = null
 
+
 func _ready():
 	# Initialize the game state
 	change_state(GameState.MAINMENU)
@@ -114,3 +115,7 @@ func _on_work_zone_destroyed():
 	work_zones_remaining -= 1
 	if work_zones_remaining <= 0:
 		change_state(GameState.WIN)
+
+func lose_level():
+	print("Player lost the level!")
+	change_state(GameState.GAME_OVER)
