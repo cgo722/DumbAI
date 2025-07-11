@@ -91,7 +91,9 @@ func start_game() -> void:
 
 func show_game_over() -> void:
 	print("Game over")
-	# Load or instantiate gameOver scene here if needed
+	if gameOver:
+		var game_over_instance = gameOver.instantiate()
+		add_child(game_over_instance)
 
 func show_win_screen() -> void:
 	print("You win!")
@@ -115,6 +117,7 @@ func _on_work_zone_destroyed():
 	work_zones_remaining -= 1
 	if work_zones_remaining <= 0:
 		change_state(GameState.WIN)
+		show_win_screen()
 
 func lose_level():
 	print("Player lost the level!")

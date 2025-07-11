@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dgh1yjj381v22"]
+[gd_scene load_steps=12 format=3 uid="uid://dgh1yjj381v22"]
 
 [ext_resource type="Script" uid="uid://cyy0s58d1hin5" path="res://GameManager.gd" id="1_itk02"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="2_43o5b"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ecbfgxyyhwd4" path="res://Levels/Level 0-5/Level1/Level1.tscn" id="7_uks48"]
 [ext_resource type="PackedScene" uid="uid://dqm3gbr0x4mwi" path="res://Levels/Menus/LevelSel.tscn" id="8_7ktct"]
 [ext_resource type="PackedScene" uid="uid://dr2sbij460fj1" path="res://Levels/Level 0-5/Level 2/Level2.tscn" id="8_vqk0m"]
+[ext_resource type="PackedScene" uid="uid://dxf7o2a60c6xp" path="res://Levels/Menus/WinMenu.tscn" id="10_ko8m6"]
 
 [node name="MainWorld" type="Node"]
 script = ExtResource("1_itk02")
@@ -19,4 +20,5 @@ mainMenu = ExtResource("4_3etub")
 gameOver = ExtResource("5_uue8y")
 levels = Array[PackedScene]([ExtResource("6_aac4l"), ExtResource("7_uks48"), ExtResource("8_vqk0m")])
 hud = ExtResource("7_aac4l")
+winScreen = ExtResource("10_ko8m6")
 levelSelect = ExtResource("8_7ktct")

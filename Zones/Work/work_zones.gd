@@ -53,6 +53,8 @@ func _process(delta):
 				var game_manager = get_tree().get_root().find_child("GameManager", true, false)
 				if game_manager and "lose_level" in game_manager:
 					game_manager.lose_level()
+				# Ensure GameManager is notified before queue_free
+				await get_tree().process_frame
 				queue_free()
 
 func update_health_bar():
