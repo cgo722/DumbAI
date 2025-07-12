@@ -110,7 +110,7 @@ func get_random_navmesh_point_anywhere() -> Vector3:
 		var candidate = Vector3(rand_x, y, rand_z)
 		var closest = NavigationServer3D.map_get_closest_point(nav_map, candidate)
 		var dist = global_transform.origin.distance_to(closest)
-		if dist > best_dist:
+		if dist > chosen_brain.min_wander_distance and dist > best_dist:
 			best_dist = dist
 			best_point = closest
 	return best_point
@@ -179,31 +179,37 @@ func tick_state(state, _blob, delta):
 
 	match state:
 		AIState.THRILLSEEKER:
-			# If no focused danger or it's invalid, find a new one
+			# If no focused danger or it's invalid, act like AIMLESS
 			if focused_danger == null or not is_instance_valid(focused_danger):
-				focused_danger = null
-				# Danger disappeared, pick a new random destination immediately
-				var tries := 0
-				while tries < 10:
-					var new_destination = get_random_navmesh_point(global_transform.origin, aimless_radius)
-					if global_transform.origin.distance_to(new_destination) > 1.0:
-						destination = new_destination
-						set_destination(destination)
-						break
-					tries += 1
+				# AIMLESS wander logic
+				var best_distance := -1.0
+				var best_destination := global_transform.origin
+				for i in range(10):
+					var candidate = get_random_navmesh_point_anywhere()
+					var dist = global_transform.origin.distance_to(candidate)
+					if dist > chosen_brain.min_wander_distance and dist > best_distance:
+						best_distance = dist
+						best_destination = candidate
+				if best_distance > chosen_brain.min_wander_distance:
+					destination = best_destination
+					set_destination(destination)
 			else:
 				var dist = global_transform.origin.distance_to(focused_danger.global_transform.origin)
 				if dist < chosen_brain.detection_range:
-					# Only set target if not already set
-					if nav_agent.get_target_position() != focused_danger.global_transform.origin:
-						nav_agent.set_target_position(focused_danger.global_transform.origin)
+					# Drop current destination and immediately move towards danger
+					destination = focused_danger.global_transform.origin
+					nav_agent.set_target_position(destination)
 				else:
 					focused_danger = null
 
 			var next_pos = nav_agent.get_next_path_position()
-			var direction = (next_pos - global_transform.origin).normalized()
-			self.velocity.x = direction.x * chosen_brain.speed
-			self.velocity.z = direction.z * chosen_brain.speed
+			var direction = (next_pos - global_transform.origin)
+			if direction.length() > 0.01:
+				direction = direction.normalized()
+			else:
+				direction = Vector3.ZERO
+			self.velocity.x = direction.x * chosen_brain.speed * 0.8
+			self.velocity.z = direction.z * chosen_brain.speed * 0.8
 		AIState.COWARD:
 			# If no focused danger or it's invalid, find a new one
 			if focused_danger == null or not is_instance_valid(focused_danger):
@@ -302,8 +308,12 @@ func _ready():
 	if ai_brain.size() > 0:
 		var hash_value = int(hash(str(level_hash)))
 		var brain_index = abs(hash_value) % ai_brain.size()
-		chosen_brain = ai_brain[brain_index]
+		# Duplicate the brain resource so each AI gets its own instance
+		chosen_brain = ai_brain[brain_index].duplicate()
 		ai_state = ai_state_from_string(chosen_brain.ai_state_name)
+		print("Spawning AI at:%s with brain index:%s" % [global_transform.origin, brain_index])
+		print("AI state: %s, vertex_color: %s" % [ai_state, chosen_brain.vertex_color]) # Debug output
+		update_mesh_color() # Ensure color is set after chosen_brain is assigned
 	else:
 		chosen_brain = null
 		ai_state = AIState.NULL
@@ -314,7 +324,6 @@ func _ready():
 		else:
 			var mesh = mesh_instance.mesh
 			var surface_count = mesh.get_surface_count()
-
 			for i in range(surface_count):
 				var mat = mesh_instance.get_active_material(i)
 				if mat:
@@ -343,6 +352,7 @@ func _ready():
 		drop_marker.material_override.albedo_color = Color(0, 0, 0, 0.5)
 		drop_marker.visible = false
 		add_child(drop_marker)
+	update_mesh_color()
 
 func _on_nav_map_changed(nav_map_id):
 	# Only set nav_ready if this is our agent's map
@@ -397,6 +407,24 @@ func ai_state_from_string(state_name: String) -> AIState:
 			return AIState.FOLLOWER
 		_:
 			return AIState.NULL
+
+func update_mesh_color():
+	if mesh_instance and chosen_brain:
+		var color = Color(1,1,1)
+		if chosen_brain.has_method("get"):
+			var vcolor = chosen_brain.get("vertex_color")
+			if typeof(vcolor) == TYPE_COLOR:
+				color = vcolor
+		print("AI mesh color for state %s: %s" % [ai_state, color]) # Debug output
+		if mesh_instance.mesh:
+			for i in range(mesh_instance.mesh.get_surface_count()):
+				var new_mat = StandardMaterial3D.new()
+				new_mat.albedo_color = color
+				mesh_instance.set_surface_override_material(i, new_mat)
+
+func set_ai_state(new_state):
+	ai_state = new_state
+	update_mesh_color()
 
 func set_destination(target_position: Vector3) -> void:
 	nav_agent.set_target_position(target_position)
