@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://30h28q7nxajo"]
+[gd_scene load_steps=11 format=3 uid="uid://30h28q7nxajo"]
 
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_a8p64"]
 [ext_resource type="Resource" uid="uid://btxcqgp77g8kc" path="res://Levels/Level 0-5/Level0/Level0_Config.tres" id="2_83fq7"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bb6suvyhofdm5" path="res://Zones/Work/Work Zones.tscn" id="5_73ye2"]
 [ext_resource type="PackedScene" uid="uid://d4i5b3vbkb4e2" path="res://Level Design/box.tscn" id="6_6c5r5"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="7_83fq7"]
+[ext_resource type="Resource" uid="uid://b5nwa0lp3o8r3" path="res://AI/AI Resources/Aimless.tres" id="8_lawe8"]
 [ext_resource type="LightmapGIData" uid="uid://bsmx25wkctkt7" path="res://Levels/Level 0-5/Level0/Level0.lmbake" id="8_ntn8y"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_83fq7"]
@@ -68,12 +69,15 @@ camera = NodePath("../Camera3D")
 
 [node name="WorkZones" parent="." instance=ExtResource("5_73ye2")]
 transform = Transform3D(1.553, 0, 0, 0, 1, 0, 0, 0, 1.302, -2.97452, 0.546075, 1.98422)
+brain_resource = ExtResource("8_lawe8")
 
 [node name="WorkZones2" parent="." instance=ExtResource("5_73ye2")]
 transform = Transform3D(1.553, 0, 0, 0, 1, 0, 0, 0, 1.302, 5.52411, 0.546075, -2.77791)
+brain_resource = ExtResource("8_lawe8")
 
 [node name="WorkZones3" parent="." instance=ExtResource("5_73ye2")]
 transform = Transform3D(1.553, 0, 0, 0, 1, 0, 0, 0, 1.302, 6.37397, 0.546075, 6.74635)
+brain_resource = ExtResource("8_lawe8")
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 generate_probes_subdiv = 4

@@ -28,7 +28,6 @@ height = 16
 [node name="WorkZones" type="Area3D"]
 collision_mask = 5
 script = ExtResource("1_4n0eh")
-current_state = "AIMLESS"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_kvaex")

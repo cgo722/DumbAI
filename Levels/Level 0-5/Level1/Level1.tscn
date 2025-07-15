@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ecbfgxyyhwd4"]
+[gd_scene load_steps=12 format=3 uid="uid://ecbfgxyyhwd4"]
 
 [ext_resource type="PackedScene" uid="uid://d4i5b3vbkb4e2" path="res://Level Design/box.tscn" id="1_ea7mm"]
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_n6p2h"]
@@ -8,6 +8,8 @@
 [ext_resource type="LightmapGIData" uid="uid://bjf2uq2nnds2r" path="res://Levels/Level 0-5/Level1/Level1.lmbake" id="3_ih2p4"]
 [ext_resource type="PackedScene" uid="uid://ddvcubqa18bly" path="res://AI/AIBase.tscn" id="4_use24"]
 [ext_resource type="PackedScene" uid="uid://ecv6kkicc3lp" path="res://Zones/Danger/Danger_Zone_Base.tscn" id="4_vgwv3"]
+[ext_resource type="Resource" uid="uid://b5nwa0lp3o8r3" path="res://AI/AI Resources/Aimless.tres" id="7_vgwv3"]
+[ext_resource type="Resource" uid="uid://sgyp6bwvasx3" path="res://AI/AI Resources/Thrillseeker.tres" id="8_vl1ee"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_ea7mm"]
 vertices = PackedVector3Array(6.5, 0.700001, 5, 7.5, 0.700001, -7, 7.5, 0.700001, -8.75, -8.75, 0.700001, -8.75, -8.75, 0.700001, 5.75)
@@ -29,33 +31,38 @@ fov = 42.0
 
 [node name="WorkZones" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 5.31348, 0.983258, -2.95615)
+brain_resource = ExtResource("7_vgwv3")
 
 [node name="WorkZones2" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 8.71348, 0.983258, 4.845)
-current_state = "THRILLSEEKER"
+brain_resource = ExtResource("7_vgwv3")
 
 [node name="WorkZones3" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, 10.4135, 0.983258, -7.29812)
+brain_resource = ExtResource("7_vgwv3")
 
 [node name="WorkZones4" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -2.27673, 0.983258, 0.443843)
-current_state = "THRILLSEEKER"
+brain_resource = ExtResource("7_vgwv3")
 
 [node name="WorkZones5" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -10.7767, 0.983258, 8.245)
+brain_resource = ExtResource("8_vl1ee")
 
 [node name="WorkZones6" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 2.89, -9.07673, 0.983258, -3.89812)
+brain_resource = ExtResource("8_vl1ee")
 
 [node name="WorkZones8" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(-7.43094e-08, 0, -2.89, 0, 1.7, 0, 1.7, 0, -1.26326e-07, -3.1251, 0.983256, -10.6817)
-current_state = "THRILLSEEKER"
+brain_resource = ExtResource("7_vgwv3")
 
 [node name="WorkZones9" parent="." instance=ExtResource("2_kec2h")]
 transform = Transform3D(-7.43094e-08, 0, -2.89, 0, 1.7, 0, 1.7, 0, -1.26326e-07, 5.61802, 0.983256, -12.3817)
+brain_resource = ExtResource("8_vl1ee")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -0.34662, -0.567654, 1.70901)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -0.34662, -0.567655, 1.70901)
 navigation_mesh = SubResource("NavigationMesh_ea7mm")
 
 [node name="Box" parent="NavigationRegion3D" instance=ExtResource("1_ea7mm")]

@@ -38,6 +38,10 @@ var leader_agent: Node = null
 var follow_time: float = 0.0
 @export var max_follow_time: float = 10.0  # seconds to follow one leader
 
+# Follower state variables
+var follow_proximity_timer: float = 0.0
+var _follower_target_offset: Vector3 = Vector3.ZERO
+
 var tapped_pause_timer := 0.0
 @export var tapped_pause_duration := 1.0  # seconds to stay frozen
 
@@ -104,9 +108,13 @@ func get_random_navmesh_point_anywhere() -> Vector3:
 	var best_point = global_transform.origin
 	var best_dist = -1.0
 	var y = global_transform.origin.y
+	var aabb_x0 = aabb.position.x
+	var aabb_x1 = aabb.position.x + aabb.size.x
+	var aabb_z0 = aabb.position.z
+	var aabb_z1 = aabb.position.z + aabb.size.z
 	for i in range(50):
-		var rand_x = randf_range(aabb.position.x, aabb.position.x + aabb.size.x)
-		var rand_z = randf_range(aabb.position.z, aabb.position.z + aabb.size.z)
+		var rand_x = randf_range(aabb_x0, aabb_x1)
+		var rand_z = randf_range(aabb_z0, aabb_z1)
 		var candidate = Vector3(rand_x, y, rand_z)
 		var closest = NavigationServer3D.map_get_closest_point(nav_map, candidate)
 		var dist = global_transform.origin.distance_to(closest)
@@ -203,13 +211,14 @@ func tick_state(state, _blob, delta):
 					focused_danger = null
 
 			var next_pos = nav_agent.get_next_path_position()
-			var direction = (next_pos - global_transform.origin)
+			var direction = next_pos - global_transform.origin
+			var speed = chosen_brain.speed * 0.8
 			if direction.length() > 0.01:
-				direction = direction.normalized()
+				direction = direction.normalized() * speed
 			else:
 				direction = Vector3.ZERO
-			self.velocity.x = direction.x * chosen_brain.speed * 0.8
-			self.velocity.z = direction.z * chosen_brain.speed * 0.8
+			self.velocity.x = direction.x
+			self.velocity.z = direction.z
 		AIState.COWARD:
 			# If no focused danger or it's invalid, find a new one
 			if focused_danger == null or not is_instance_valid(focused_danger):
@@ -235,14 +244,24 @@ func tick_state(state, _blob, delta):
 					focused_danger = null  # Lost interest, out of range
 
 			var next_pos = nav_agent.get_next_path_position()
-			var direction = (next_pos - global_transform.origin).normalized()
-			self.velocity.x = direction.x * chosen_brain.speed * 1.2
-			self.velocity.z = direction.z * chosen_brain.speed * 1.2
+			var direction = next_pos - global_transform.origin
+			var speed = chosen_brain.speed * 1.2
+			if direction.length() > 0.01:
+				direction = direction.normalized() * speed
+			else:
+				direction = Vector3.ZERO
+			self.velocity.x = direction.x
+			self.velocity.z = direction.z
 		AIState.JUMPER:
 			var next_pos = nav_agent.get_next_path_position()
-			var direction = (next_pos - global_transform.origin).normalized()
-			self.velocity.x = direction.x * (chosen_brain.speed * 0.8)
-			self.velocity.z = direction.z * (chosen_brain.speed * 0.8)
+			var direction = next_pos - global_transform.origin
+			var speed = chosen_brain.speed * 0.8
+			if direction.length() > 0.01:
+				direction = direction.normalized() * speed
+			else:
+				direction = Vector3.ZERO
+			self.velocity.x = direction.x
+			self.velocity.z = direction.z
 			# Time-based sporadic jump logic
 			jumper_jump_check_timer += delta
 			if jumper_jump_check_timer >= jumper_jump_check_interval:
@@ -251,16 +270,32 @@ func tick_state(state, _blob, delta):
 					self.velocity.y = chosen_brain.jump_height
 		AIState.AIMLESS:
 			var next_pos = nav_agent.get_next_path_position()
-			var direction = (next_pos - global_transform.origin).normalized()
-			self.velocity.x = direction.x * (chosen_brain.speed * 0.8)
-			self.velocity.z = direction.z * (chosen_brain.speed * 0.8)
+			var direction = next_pos - global_transform.origin
+			var speed = chosen_brain.speed * 0.8
+			if direction.length() > 0.01:
+				direction = direction.normalized() * speed
+			else:
+				direction = Vector3.ZERO
+			self.velocity.x = direction.x
+			self.velocity.z = direction.z
 		AIState.FOLLOWER:
 			follow_time += delta
-
-			if leader_agent == null or follow_time > max_follow_time or not is_instance_valid(leader_agent):
-				leader_agent = null
+			var follow_radius := 3.0
+			var min_offset_radius := 2.0
+			var max_offset_radius := 4.0
+			# If leader_agent is null, invalid, or not suitable, pick a new one
+			var must_pick_new_leader := false
+			if leader_agent == null or not is_instance_valid(leader_agent):
+				must_pick_new_leader = true
+			elif leader_agent == self or (leader_agent.has_method("get") and leader_agent.ai_state == AIState.FOLLOWER):
+				must_pick_new_leader = true
+			# If we've been close for too long, pick a new leader
+			if follow_proximity_timer > 5.0:
+				must_pick_new_leader = true
+			if must_pick_new_leader:
 				var agents = get_tree().get_nodes_in_group("ai_agents")
 				var nearest_dist = chosen_brain.detection_range + 1
+				var new_leader = null
 				for agent in agents:
 					if agent == self:
 						continue
@@ -269,30 +304,42 @@ func tick_state(state, _blob, delta):
 					var dist = global_transform.origin.distance_to(agent.global_transform.origin)
 					if dist < nearest_dist:
 						nearest_dist = dist
-						leader_agent = agent
+						new_leader = agent
+				leader_agent = new_leader
 				follow_time = 0.0
+				follow_proximity_timer = 0.0
 
-			if leader_agent != null:
-				var target_pos = leader_agent.global_transform.origin
+			if leader_agent != null and is_instance_valid(leader_agent):
+				# Pick a random offset near the leader if we're far or just picked a new leader
+				if not "_follower_target_offset" in self or self._follower_target_offset == null or global_transform.origin.distance_to(leader_agent.global_transform.origin + self._follower_target_offset) > max_offset_radius:
+					# Pick a random offset in XZ plane
+					var angle = randf() * TAU
+					var dist = randf_range(min_offset_radius, max_offset_radius)
+					var offset = Vector3(cos(angle) * dist, 0, sin(angle) * dist)
+					self._follower_target_offset = offset
+				var target_pos = leader_agent.global_transform.origin + self._follower_target_offset
 				nav_agent.set_target_position(target_pos)
 
+				# Move toward the offset
 				var next_pos = nav_agent.get_next_path_position()
-				var direction = (next_pos - global_transform.origin).normalized()
-				self.velocity.x = direction.x * chosen_brain.speed
-				self.velocity.z = direction.z * chosen_brain.speed
+				var direction = next_pos - global_transform.origin
+				var speed = chosen_brain.speed
+				if direction.length() > 0.01:
+					direction = direction.normalized() * speed
+				else:
+					direction = Vector3.ZERO
+				self.velocity.x = direction.x
+				self.velocity.z = direction.z
+
+				# Check if within follow_radius of leader
+				var dist_to_leader = global_transform.origin.distance_to(leader_agent.global_transform.origin)
+				if dist_to_leader <= follow_radius:
+					follow_proximity_timer += delta
+				else:
+					follow_proximity_timer = 0.0
 			else:
 				self.velocity = Vector3.ZERO
-
-	# Apply gravity
-	if not is_on_floor():
-		self.velocity.y -= gravity * delta
-	else:
-		if not _was_on_floor:
-			# Just landed, reset vertical velocity
-			self.velocity.y = 0.0
-	_was_on_floor = is_on_floor()
-
-	move_and_slide()
+				follow_proximity_timer = 0.0
 
 func on_tap():
 	tapped_pause_timer = tapped_pause_duration
@@ -313,23 +360,16 @@ func _ready():
 		ai_state = ai_state_from_string(chosen_brain.ai_state_name)
 		print("Spawning AI at:%s with brain index:%s" % [global_transform.origin, brain_index])
 		print("AI state: %s, vertex_color: %s" % [ai_state, chosen_brain.vertex_color]) # Debug output
-		update_mesh_color() # Ensure color is set after chosen_brain is assigned
+		print("AI at ", global_transform.origin)
+		print("Brain color: ", chosen_brain.vertex_color)
+		# update_mesh_color()  # Removed to avoid premature material override
+		await get_tree().process_frame
+		update_mesh_color()
 	else:
 		chosen_brain = null
 		ai_state = AIState.NULL
 	# Set mesh vertex color from brain
-	if mesh_instance and chosen_brain:
-		if mesh_instance.mesh == null:
-			print("MeshInstance3D has no mesh assigned!")
-		else:
-			var mesh = mesh_instance.mesh
-			var surface_count = mesh.get_surface_count()
-			for i in range(surface_count):
-				var mat = mesh_instance.get_active_material(i)
-				if mat:
-					var new_mat = mat.duplicate()
-					new_mat.albedo_color = chosen_brain.vertex_color
-					mesh_instance.set_surface_override_material(i, new_mat)
+	# (old mesh coloring logic removed, now handled in update_mesh_color)
 	NavigationServer3D.map_changed.connect(_on_nav_map_changed)
 	# Optionally, you can also call _check_nav_ready() after a short delay
 	get_tree().create_timer(0.1).timeout.connect(_on_spawn_delay_timeout)
@@ -382,14 +422,13 @@ func _process(delta):
 		tick_state(ai_state, null, delta)
 	else:
 		print("AI state is NULL, no action taken.")
-	# Only apply gravity if enabled
+	# Only apply gravity if enabled, and centralize y handling
 	if gravity_enabled:
 		if not is_on_floor():
 			self.velocity.y -= gravity * delta
-		else:
-			if not _was_on_floor:
-				# Just landed, reset vertical velocity
-				self.velocity.y = 0.0
+		elif not _was_on_floor:
+			# Just landed, reset vertical velocity
+			self.velocity.y = 0.0
 		_was_on_floor = is_on_floor()
 	move_and_slide()
 
@@ -409,6 +448,7 @@ func ai_state_from_string(state_name: String) -> AIState:
 			return AIState.NULL
 
 func update_mesh_color():
+	print("update_mesh_color CALLED. Current brain color: ", chosen_brain.vertex_color, " AI state: ", ai_state)
 	if mesh_instance and chosen_brain:
 		var color = Color(1,1,1)
 		if chosen_brain.has_method("get"):
@@ -416,21 +456,26 @@ func update_mesh_color():
 			if typeof(vcolor) == TYPE_COLOR:
 				color = vcolor
 		print("AI mesh color for state %s: %s" % [ai_state, color]) # Debug output
-		if mesh_instance.mesh:
-			for i in range(mesh_instance.mesh.get_surface_count()):
-				var new_mat = StandardMaterial3D.new()
-				new_mat.albedo_color = color
-				mesh_instance.set_surface_override_material(i, new_mat)
+		for i in range(mesh_instance.mesh.get_surface_count()):
+			var new_mat = StandardMaterial3D.new()
+			new_mat.albedo_color = color
+			mesh_instance.set_surface_override_material(i, new_mat)
 
 func set_ai_state(new_state):
+	print("Setting new AI state: ", new_state)
 	ai_state = new_state
 	update_mesh_color()
 
 func set_destination(target_position: Vector3) -> void:
 	nav_agent.set_target_position(target_position)
 
+
 func get_state():
 	return chosen_brain.ai_state_name
+
+# Returns the chosen brain resource instance for this AI.
+func get_chosen_brain():
+	return chosen_brain
 
 func stop_movement():
 	is_stopped = true

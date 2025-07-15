@@ -9,13 +9,13 @@ ai_spawns = Array[Dictionary]([{
 "brain_index": 0,
 "position": NodePath("AI_SpawnPoint")
 }, {
-"brain_index": 0,
+"brain_index": 2,
 "position": NodePath("AI_SpawnPoint2")
 }, {
-"brain_index": 0,
+"brain_index": 2,
 "position": NodePath("AI_SpawnPoint3")
 }, {
-"brain_index": 0,
+"brain_index": 3,
 "position": NodePath("AI_SpawnPoint4")
 }, {
 "brain_index": 0,

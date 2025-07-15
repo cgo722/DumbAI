@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr2sbij460fj1"]
+[gd_scene load_steps=14 format=3 uid="uid://dr2sbij460fj1"]
 
 [ext_resource type="Script" uid="uid://m1ks7ri76oex" path="res://Levels/playground.gd" id="1_1q1tk"]
 [ext_resource type="PackedScene" uid="uid://cjf1y8qek2ydh" path="res://Level Design/Cylinder.tscn" id="2_6xt7w"]
@@ -9,6 +9,9 @@
 [ext_resource type="LightmapGIData" uid="uid://buuw5p7e6cje3" path="res://Levels/Level 0-5/Level 2/Level2.lmbake" id="4_am47c"]
 [ext_resource type="PackedScene" uid="uid://bb6suvyhofdm5" path="res://Zones/Work/Work Zones.tscn" id="5_6xt7w"]
 [ext_resource type="PackedScene" uid="uid://c3pvspr5eung" path="res://Controlls/mobile input.tscn" id="5_av7i5"]
+[ext_resource type="Resource" uid="uid://b5nwa0lp3o8r3" path="res://AI/AI Resources/Aimless.tres" id="10_o4uoy"]
+[ext_resource type="Resource" uid="uid://sgyp6bwvasx3" path="res://AI/AI Resources/Thrillseeker.tres" id="11_6e1x8"]
+[ext_resource type="Resource" uid="uid://cycnrtxfr8aqi" path="res://AI/AI Resources/Follower.tres" id="12_mdu5t"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_jvreu"]
 vertices = PackedVector3Array(-35.25, 25.75, -25.65, -35.25, 25.75, -12.15, 35.25, 25.75, -12.15, 35.25, 25.75, -25.65, 0.25, 0.75, -16.15, 2, 0.75, -16.4, 2, 0.75, -24.15, -24, 0.75, 9.85, -11.25, 0.75, 9.85, -11, 0.75, 8.1, -24, 0.75, -24.15, 0.25, 0.75, 8.1, -10, 9.75, -10.65, -8.25, 9.75, -10.9, -8.5, 9.75, -24.15, -24, 9.75, -8.65, -10, 9.75, -8.65, -24, 9.75, -24.15, 20, 9.75, -10.9, 20, 9.75, -24.15, 3.75, 0.75, -16.15, 15, 0.75, 8.1, 15.25, 0.75, 9.85, 23.25, 0.75, 9.85, 23.25, 0.75, -24.15, 3.75, 0.75, 8.1, 1.25, 2.25, 6.85, 2.75, 2.25, 6.85, 2.75, 2.25, -15.4, 1.25, 2.25, -15.4, -24, 9.75, 19.1, -10, 9.75, 19.1, -35.25, 25.75, -6.65, -35.25, 25.75, 6.85, 35.25, 25.75, 6.85, 35.25, 25.75, -6.65, 3, 2.25, 9.1, 1, 2.25, 9.1, -10.25, 2.25, 10.85, 14.25, 2.25, 10.85, -10.25, 2.25, 9.1, 14.25, 2.25, 9.1, -9.75, 0.75, 23.1, -9.5, 0.75, 11.85, -11.25, 0.75, 11.6, -24, 0.75, 23.1, 15.25, 0.75, 11.6, 13.5, 0.75, 11.85, 13.75, 0.75, 23.1, 23.25, 0.75, 23.1, -35.25, 25.75, 11.35, -35.25, 25.75, 24.6, 35.25, 25.75, 24.6, 35.25, 25.75, 11.35)
@@ -38,12 +41,15 @@ transform = Transform3D(50, 0, 0, 0, 0.5, 0, 0, 0, 50, 0, 0, 0)
 
 [node name="Box13" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
 transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, 0)
+visible = false
 
 [node name="Box14" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
 transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, 18)
+visible = false
 
 [node name="Box15" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
 transform = Transform3D(71.5, 0, 0, 0, 0.715, 0, 0, 0, 14.3, 0, 25, -19)
+visible = false
 
 [node name="Box4" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
 transform = Transform3D(15, 0, 0, 0, 0.5, 0, 0, 0, 45, -17, 9, -3)
@@ -52,7 +58,7 @@ transform = Transform3D(15, 0, 0, 0, 0.5, 0, 0, 0, 45, -17, 9, -3)
 transform = Transform3D(-6.55671e-07, 0, 45, 0, 0.5, 0, -15, 0, -1.96701e-06, -2, 9, -18)
 
 [node name="Box2" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
-transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -50, 0, 0.5, -2.18557e-06, 0, 0, -25)
+transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -50, 0, 0.5, -2.18557e-06, 0.0343513, 0, -25)
 
 [node name="Box6" parent="NavigationRegion3D" instance=ExtResource("3_cd8n7")]
 transform = Transform3D(50, 0, 0, 0, -2.18557e-08, -50, 0, 0.5, -2.18557e-06, 0, -17, 24)
@@ -97,30 +103,39 @@ light_data = ExtResource("4_am47c")
 
 [node name="WorkZones" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 7.3788, -23, 1, 9)
+brain_resource = ExtResource("10_o4uoy")
 
 [node name="WorkZones2" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 7.3788, -23, 1, -12)
+brain_resource = ExtResource("10_o4uoy")
 
 [node name="WorkZones3" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 13, 1, -4)
+brain_resource = ExtResource("11_6e1x8")
 
 [node name="WorkZones9" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 3, 1, -24)
+brain_resource = ExtResource("11_6e1x8")
 
 [node name="WorkZones4" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(-1.98887e-07, 0, 7.3788, 0, 1.4, 0, -4.55, 0, -3.22538e-07, 0, 1, 18)
+brain_resource = ExtResource("12_mdu5t")
 
 [node name="WorkZones5" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -23, 10, 14)
+brain_resource = ExtResource("12_mdu5t")
 
 [node name="WorkZones6" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -8, 10, -23)
+brain_resource = ExtResource("10_o4uoy")
 
 [node name="WorkZones7" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, 13, 10, -14)
+brain_resource = ExtResource("12_mdu5t")
 
 [node name="WorkZones8" parent="." instance=ExtResource("5_6xt7w")]
 transform = Transform3D(4.55, 0, 0, 0, 1.4, 0, 0, 0, 3.6894, -22, 10, -12)
+brain_resource = ExtResource("11_6e1x8")
 
 [node name="AI_SpawnPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)

@@ -90,7 +90,8 @@ func start_game() -> void:
 			current_level_instance.connect("work_zone_destroyed", Callable(self, "_on_work_zone_destroyed"))
 
 func show_game_over() -> void:
-	print("Game over")
+	print("Instantiating game over screen")
+	print("gameOver is null? ", gameOver == null)
 	if gameOver:
 		var game_over_instance = gameOver.instantiate()
 		add_child(game_over_instance)

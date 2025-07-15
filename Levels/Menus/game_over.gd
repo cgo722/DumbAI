@@ -21,8 +21,9 @@ func _on_main_menu_pressed() -> void:
 		game_manager.current_level_instance = null
 	if game_manager.has_method("change_state"):
 		game_manager.change_state(game_manager.GameState.LEVEL_SELECT)
-	self.queue_free()
+	queue_free()
 
 func _on_retry_pressed() -> void:
 	var game_manager = get_tree().get_root().get_node("MainWorld") # Adjust path if needed
 	game_manager.restart_level()
+	queue_free()

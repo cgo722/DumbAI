@@ -1,10 +1,14 @@
 extends Area3D
 
-# The AI's current state in the work zone. Can be set in the editor or by code.
-@export var current_state: String = "IDLE"
+# The AI's brain resource in the work zone. Can be set in the editor or by code.
+@export var brain_resource: Resource
 @export var max_health: float = 20.0
 @export var min_health: float = 0.0
 var health: float
+var gameover: bool = false
+@onready var visual_mesh := $CSGBox3D
+
+var default_color := Color(1,1,1,1)
 
 # UI health bar reference (assumes a child Control named HealthBar2D with a TextureProgressBar)
 @onready var health_bar := $HealthBar2D/TextureProgressBar
@@ -19,7 +23,21 @@ func _ready() -> void:
 		health_bar_2d.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if health_bar:
 		health_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	default_color = visual_mesh.material_override.albedo_color if visual_mesh.material_override else Color(1,1,1,1)
+	update_zone_color()
 	update_health_bar()
+
+func update_zone_color():
+	if brain_resource:
+		_set_visual_color(brain_resource.vertex_color)
+	else:
+		_set_visual_color(default_color)
+
+func _set_visual_color(color: Color):
+	if visual_mesh:
+		var new_mat := StandardMaterial3D.new()
+		new_mat.albedo_color = color
+		visual_mesh.material_override = new_mat
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -50,12 +68,11 @@ func _process(delta):
 			update_health_bar()
 			if health >= max_health:
 				print("Work zone failed! Player loses level.")
-				var game_manager = get_tree().get_root().find_child("GameManager", true, false)
-				if game_manager and "lose_level" in game_manager:
-					game_manager.lose_level()
+				var game_manager = get_tree().root.get_node("MainWorld")
+				if game_manager and game_manager.has_method("change_state") and gameover == false:
+					game_manager.change_state(1)
+					gameover = true
 				# Ensure GameManager is notified before queue_free
-				await get_tree().process_frame
-				queue_free()
 
 func update_health_bar():
 	if health_bar:
@@ -89,11 +106,11 @@ func _on_body_entered(body):
 	if ai_stopped:
 		return # Only allow one AI to be stopped at a time
 	print("yo")
-	# Check if the body has a 'state' property (customize as needed)
-	if body.has_method("get_state"):
-		var ai_state = body.get_state()
-		if ai_state == current_state:
-			print("AI state matches work zone state: %s" % ai_state)
+	# Check if the body has a 'get_chosen_brain' method and matches brain_resource
+	if body.has_method("get_chosen_brain"):
+		var chosen_brain = body.get_chosen_brain()
+		if chosen_brain == brain_resource:
+			print("AI brain matches work zone brain resource")
 			# Stop AI movement
 			if body.has_method("stop_movement"):
 				body.stop_movement()
@@ -112,9 +129,9 @@ func _on_body_entered(body):
 			damage_timer = 0.0 # Reset timer when AI enters
 			update_health_bar()
 		else:
-			print("AI state does not match work zone state. AI: %s, Zone: %s" % [ai_state, current_state])
+			print("AI brain does not match work zone brain resource.")
 	else:
-		print("Entered body does not have a 'get_state' method.")
+		print("Entered body does not have a 'get_chosen_brain' method.")
 
 func _on_body_exited(_body):
 	ai_stopped = false
@@ -124,3 +141,8 @@ func _on_body_exited(_body):
 	var mobile_input = get_tree().get_root().find_child("mobile_input", true, false)
 	if mobile_input and "clear_agent_in_workzone" in mobile_input:
 		mobile_input.clear_agent_in_workzone()
+
+func get_expected_state() -> String:
+	if brain_resource:
+		return brain_resource.ai_state_name
+	return ""
